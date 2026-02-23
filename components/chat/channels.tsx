@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
-import { Hash, Search, Plus, Send, Pin, Users2, MessageCircle,Zap } from "lucide-react"
+import { Hash, Search, Plus, Send, Pin, Users2, MessageCircle, Zap } from "lucide-react"
 
 interface Channel {
   id: string
