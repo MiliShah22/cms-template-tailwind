@@ -4,7 +4,7 @@ import { ProjectsContent } from "@/components/projects/content"
 
 export const metadata: Metadata = {
   title: "Projects - CMSFullForm Dashboard",
-  description: "Track CMS implementation and campaign projects.",
+  description: "Manage your projects and tasks.",
 }
 
 export default function ProjectsPage() {
@@ -14,5 +14,3 @@ export default function ProjectsPage() {
     </Layout>
   )
 }
-
-

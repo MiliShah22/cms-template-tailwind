@@ -1,0 +1,47 @@
+# Cross-platform git settings for consistent line endings
+# Force these files to always use LF (Unix-style) line endings
+
+# Package files - always use LF
+package.json text eol=lf
+package-lock.json text eol=lf
+
+# JavaScript/TypeScript files - always use LF
+*.js text eol=lf
+*.jsx text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+
+# JSON files - always use LF
+*.json text eol=lf
+
+# Configuration files - always use LF
+*.yml text eol=lf
+*.yaml text eol=lf
+*.md text eol=lf
+
+# CSS/Sass files - always use LF
+*.css text eol=lf
+*.scss text eol=lf
+*.sass text eol=lf
+
+# Image and binary files should not be converted
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.svg binary
+*.ico binary
+*.webp binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+
+# Other text files - use system default but normalize to LF
+*.html text eol=lf
+*.xml text eol=lf
+*.txt text eol=lf
+
+# Exclude generated files from language statistics
+*.min.js linguist-language=JavaScript
+*.min.css linguist-language=CSS
