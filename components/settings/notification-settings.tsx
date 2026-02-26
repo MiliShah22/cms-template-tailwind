@@ -1,29 +1,19 @@
 "use client"
 
-import { useState } from "react"
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState, AppDispatch } from '@/lib/store'
+import { updateEmailNotification, updatePushNotification } from '@/lib/store/settingsSlice'
 import { Switch } from "@/components/ui/switch"
-import { CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Bell, Mail, MessageSquare } from "lucide-react"
 
 export default function NotificationSettings() {
-  const [emailNotifications, setEmailNotifications] = useState({
-    security: true,
-    marketing: false,
-    updates: true,
-    comments: true,
-    mentions: true,
-  })
-
-  const [pushNotifications, setPushNotifications] = useState({
-    messages: true,
-    updates: false,
-    marketing: false,
-    security: true,
-  })
+  const dispatch = useDispatch<AppDispatch>()
+  const notifications = useSelector((state: RootState) => state.settings.notifications)
 
   return (
-    <>
+    <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Bell className="h-5 w-5" />
@@ -49,8 +39,8 @@ export default function NotificationSettings() {
                 </p>
               </div>
               <Switch
-                checked={emailNotifications.security}
-                onCheckedChange={(checked) => setEmailNotifications({ ...emailNotifications, security: checked })}
+                checked={notifications.email.security}
+                onCheckedChange={(checked) => dispatch(updateEmailNotification({ key: 'security', value: checked }))}
               />
             </div>
 
@@ -60,8 +50,8 @@ export default function NotificationSettings() {
                 <p className="text-xs text-gray-600 dark:text-gray-400">News about product features and updates</p>
               </div>
               <Switch
-                checked={emailNotifications.updates}
-                onCheckedChange={(checked) => setEmailNotifications({ ...emailNotifications, updates: checked })}
+                checked={notifications.email.updates}
+                onCheckedChange={(checked) => dispatch(updateEmailNotification({ key: 'updates', value: checked }))}
               />
             </div>
 
@@ -73,8 +63,8 @@ export default function NotificationSettings() {
                 </p>
               </div>
               <Switch
-                checked={emailNotifications.comments}
-                onCheckedChange={(checked) => setEmailNotifications({ ...emailNotifications, comments: checked })}
+                checked={notifications.email.comments}
+                onCheckedChange={(checked) => dispatch(updateEmailNotification({ key: 'comments', value: checked }))}
               />
             </div>
 
@@ -86,8 +76,8 @@ export default function NotificationSettings() {
                 </p>
               </div>
               <Switch
-                checked={emailNotifications.mentions}
-                onCheckedChange={(checked) => setEmailNotifications({ ...emailNotifications, mentions: checked })}
+                checked={notifications.email.mentions}
+                onCheckedChange={(checked) => dispatch(updateEmailNotification({ key: 'mentions', value: checked }))}
               />
             </div>
 
@@ -97,8 +87,8 @@ export default function NotificationSettings() {
                 <p className="text-xs text-gray-600 dark:text-gray-400">Tips, offers, and promotional content</p>
               </div>
               <Switch
-                checked={emailNotifications.marketing}
-                onCheckedChange={(checked) => setEmailNotifications({ ...emailNotifications, marketing: checked })}
+                checked={notifications.email.marketing}
+                onCheckedChange={(checked) => dispatch(updateEmailNotification({ key: 'marketing', value: checked }))}
               />
             </div>
           </div>
@@ -120,8 +110,8 @@ export default function NotificationSettings() {
                 <p className="text-xs text-gray-600 dark:text-gray-400">Direct messages and chat notifications</p>
               </div>
               <Switch
-                checked={pushNotifications.messages}
-                onCheckedChange={(checked) => setPushNotifications({ ...pushNotifications, messages: checked })}
+                checked={notifications.push.messages}
+                onCheckedChange={(checked) => dispatch(updatePushNotification({ key: 'messages', value: checked }))}
               />
             </div>
 
@@ -131,8 +121,8 @@ export default function NotificationSettings() {
                 <p className="text-xs text-gray-600 dark:text-gray-400">Important security notifications</p>
               </div>
               <Switch
-                checked={pushNotifications.security}
-                onCheckedChange={(checked) => setPushNotifications({ ...pushNotifications, security: checked })}
+                checked={notifications.push.security}
+                onCheckedChange={(checked) => dispatch(updatePushNotification({ key: 'security', value: checked }))}
               />
             </div>
 
@@ -142,8 +132,8 @@ export default function NotificationSettings() {
                 <p className="text-xs text-gray-600 dark:text-gray-400">New features and important updates</p>
               </div>
               <Switch
-                checked={pushNotifications.updates}
-                onCheckedChange={(checked) => setPushNotifications({ ...pushNotifications, updates: checked })}
+                checked={notifications.push.updates}
+                onCheckedChange={(checked) => dispatch(updatePushNotification({ key: 'updates', value: checked }))}
               />
             </div>
 
@@ -153,13 +143,13 @@ export default function NotificationSettings() {
                 <p className="text-xs text-gray-600 dark:text-gray-400">Promotional notifications and offers</p>
               </div>
               <Switch
-                checked={pushNotifications.marketing}
-                onCheckedChange={(checked) => setPushNotifications({ ...pushNotifications, marketing: checked })}
+                checked={notifications.push.marketing}
+                onCheckedChange={(checked) => dispatch(updatePushNotification({ key: 'marketing', value: checked }))}
               />
             </div>
           </div>
         </div>
       </CardContent>
-    </>
+    </Card>
   )
 }

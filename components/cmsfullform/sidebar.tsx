@@ -612,111 +612,111 @@ const menuData: MenuSection[] = [
       },
     ],
   },
-  {
-    id: "tools",
-    label: "Tools & Utilities",
-    items: [
-      {
-        id: "plugins",
-        label: "Plugins",
-        href: "/plugins",
-        icon: Puzzle,
-        badge: "8",
-        children: [
-          {
-            id: "installed",
-            label: "Plugins đã cài",
-            href: "/plugins",
-            icon: Package,
-          },
-          {
-            id: "add-new",
-            label: "Thêm mới",
-            href: "/plugins",
-            icon: Plus,
-          },
-        ],
-      },
-      {
-        id: "api",
-        label: "API",
-        href: "/api",
-        icon: Code,
-        children: [
-          {
-            id: "documentation",
-            label: "Documentation",
-            href: "/api/docs",
-            icon: FileText,
-          },
-          {
-            id: "keys",
-            label: "API Keys",
-            href: "/api/keys",
-            icon: Key,
-          },
-          {
-            id: "webhooks",
-            label: "Webhooks",
-            href: "/api/webhooks",
-            icon: Zap,
-          },
-        ],
-      },
-      {
-        id: "integrations",
-        label: "Integrations",
-        href: "/integrations",
-        icon: Layers,
-        children: [
-          {
-            id: "third-party",
-            label: "Third Party",
-            href: "/integrations/third-party",
-            icon: Globe,
-          },
-          {
-            id: "plugins",
-            label: "Plugins",
-            href: "/integrations/plugins",
-            icon: Plus,
-          },
-          {
-            id: "extensions",
-            label: "Extensions",
-            href: "/integrations/extensions",
-            icon: Zap,
-          },
-        ],
-      },
-      {
-        id: "backup",
-        label: "Backup & Restore",
-        href: "/backup",
-        icon: Database,
-        children: [
-          {
-            id: "create-backup",
-            label: "Create Backup",
-            href: "/backup/create",
-            icon: Download,
-          },
-          {
-            id: "restore",
-            label: "Restore",
-            href: "/backup/restore",
-            icon: Upload,
-          },
-          {
-            id: "schedule",
-            label: "Schedule",
-            href: "/backup/schedule",
-            icon: Clock,
-          },
-        ],
-      },
-    ],
-  },
+  // {
+  //   id: "tools",
+  //   label: "Tools & Utilities",
+  //   items: [
+  //     {
+  //       id: "plugins",
+  //       label: "Plugins",
+  //       href: "/plugins",
+  //       icon: Puzzle,
+  //       badge: "8",
+  //       children: [
+  //         {
+  //           id: "installed",
+  //           label: "Plugins đã cài",
+  //           href: "/plugins",
+  //           icon: Package,
+  //         },
+  //         {
+  //           id: "add-new",
+  //           label: "Thêm mới",
+  //           href: "/plugins",
+  //           icon: Plus,
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       id: "api",
+  //       label: "API",
+  //       href: "/api",
+  //       icon: Code,
+  //       children: [
+  //         {
+  //           id: "documentation",
+  //           label: "Documentation",
+  //           href: "/api/docs",
+  //           icon: FileText,
+  //         },
+  //         {
+  //           id: "keys",
+  //           label: "API Keys",
+  //           href: "/api/keys",
+  //           icon: Key,
+  //         },
+  //         {
+  //           id: "webhooks",
+  //           label: "Webhooks",
+  //           href: "/api/webhooks",
+  //           icon: Zap,
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       id: "integrations",
+  //       label: "Integrations",
+  //       href: "/integrations",
+  //       icon: Layers,
+  //       children: [
+  //         {
+  //           id: "third-party",
+  //           label: "Third Party",
+  //           href: "/integrations/third-party",
+  //           icon: Globe,
+  //         },
+  //         {
+  //           id: "plugins",
+  //           label: "Plugins",
+  //           href: "/integrations/plugins",
+  //           icon: Plus,
+  //         },
+  //         {
+  //           id: "extensions",
+  //           label: "Extensions",
+  //           href: "/integrations/extensions",
+  //           icon: Zap,
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       id: "backup",
+  //       label: "Backup & Restore",
+  //       href: "/backup",
+  //       icon: Database,
+  //       children: [
+  //         {
+  //           id: "create-backup",
+  //           label: "Create Backup",
+  //           href: "/backup/create",
+  //           icon: Download,
+  //         },
+  //         {
+  //           id: "restore",
+  //           label: "Restore",
+  //           href: "/backup/restore",
+  //           icon: Upload,
+  //         },
+  //         {
+  //           id: "schedule",
+  //           label: "Schedule",
+  //           href: "/backup/schedule",
+  //           icon: Clock,
+  //         },
+  //       ],
+  //     },
+  //   ],
+  // },
 ]
 
 export default function Sidebar() {
@@ -1004,7 +1004,7 @@ export default function Sidebar() {
           <div className="h-16 px-3 flex items-center border-b border-gray-200 dark:border-[#1F1F23]">
             {showText ? (
               <Link
-                href="https://cmsfullform.com/"
+                href=""
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-3 w-full"

@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
+import { Eye } from "lucide-react"
+import Link from "next/link"
 
 export interface OrderData {
   id: string
@@ -128,6 +130,13 @@ export function OrderTable({ title, description, orders }: OrderTableProps) {
                     <TableCell className="text-right font-medium">{order.total}</TableCell>
                     <TableCell className="hidden sm:table-cell text-right">
                       <Badge variant="outline">{order.status || 'Pending'}</Badge>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Link href={`/orders/${order.id}`}>
+                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                      </Link>
                     </TableCell>
                   </TableRow>
                 ))}

@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card"
 import ProfileSettings from "./profile-settings"
 import SecuritySettings from "./security-settings"
 import NotificationSettings from "./notification-settings"
+import DemoSettings from "./demo-settings"
 import { User, Shield, Bell } from "lucide-react"
 
 export default function SettingsContent() {
@@ -45,9 +46,9 @@ export default function SettingsContent() {
         </TabsContent>
 
         <TabsContent value="notifications">
-          <Card>
-            <NotificationSettings />
-          </Card>
+          <NotificationSettings />
+          {/* Demo component showing Redux state in real-time */}
+          <DemoSettings />
         </TabsContent>
       </Tabs>
     </div>

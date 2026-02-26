@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { Folder, Plus, Calendar, Users, Clock, ArrowRight } from "lucide-react"
+import Link from "next/link"
 
 const projects = [
   {
@@ -275,59 +276,61 @@ export function ProjectsContent() {
       {/* Projects List */}
       <div className="grid gap-4">
         {projects.map((project) => (
-          <Card key={project.id} className="hover:shadow-md transition-shadow">
-            <CardContent className="pt-4">
-              <div className="flex flex-col gap-4">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <h3 className="text-lg font-semibold">{project.name}</h3>
-                      <Badge className={`text-xs ${priorityColors[project.priority]}`}>
-                        {project.priority}
-                      </Badge>
+          <Link key={project.id} href={`/projects/${project.id}`}>
+            <Card className="hover:shadow-md transition-shadow cursor-pointer">
+              <CardContent className="pt-4">
+                <div className="flex flex-col gap-4">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-lg font-semibold">{project.name}</h3>
+                        <Badge className={`text-xs ${priorityColors[project.priority]}`}>
+                          {project.priority}
+                        </Badge>
+                      </div>
+                      <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">{project.description}</p>
                     </div>
-                    <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">{project.description}</p>
+                    <Badge
+                      variant="outline"
+                      className={`${project.status === "completed"
+                        ? "border-green-500 text-green-700"
+                        : project.status === "in-progress"
+                          ? "border-blue-500 text-blue-700"
+                          : "border-yellow-500 text-yellow-700"
+                        }`}
+                    >
+                      {project.status.replace("-", " ")}
+                    </Badge>
                   </div>
-                  <Badge
-                    variant="outline"
-                    className={`${project.status === "completed"
-                      ? "border-green-500 text-green-700"
-                      : project.status === "in-progress"
-                        ? "border-blue-500 text-blue-700"
-                        : "border-yellow-500 text-yellow-700"
-                      }`}
-                  >
-                    {project.status.replace("-", " ")}
-                  </Badge>
-                </div>
 
-                <div className="flex items-center gap-6 text-sm text-gray-500">
-                  <div className="flex items-center gap-1">
-                    <Calendar className="h-4 w-4" />
-                    <span>Due {project.dueDate}</span>
+                  <div className="flex items-center gap-6 text-sm text-gray-500">
+                    <div className="flex items-center gap-1">
+                      <Calendar className="h-4 w-4" />
+                      <span>Due {project.dueDate}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Users className="h-4 w-4" />
+                      <span>{project.team.join(", ")}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Clock className="h-4 w-4" />
+                      <span>
+                        {project.tasks.completed}/{project.tasks.total} tasks
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <Users className="h-4 w-4" />
-                    <span>{project.team.join(", ")}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Clock className="h-4 w-4" />
-                    <span>
-                      {project.tasks.completed}/{project.tasks.total} tasks
-                    </span>
-                  </div>
-                </div>
 
-                <div className="space-y-1">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-500">Progress</span>
-                    <span className="font-medium">{project.progress}%</span>
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-gray-500">Progress</span>
+                      <span className="font-medium">{project.progress}%</span>
+                    </div>
+                    <Progress value={project.progress} className="h-2" />
                   </div>
-                  <Progress value={project.progress} className="h-2" />
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </Link>
         ))}
       </div>
     </div>
