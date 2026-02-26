@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Activity, Users, ShoppingCart, DollarSign, TrendingUp, Server, Zap, Clock } from "lucide-react"
+import { Activity, Users, FileText, Image, MessageSquare, MessageCircle, Eye, TrendingUp, Zap, Clock, PenTool, Upload, Bell } from "lucide-react"
 
 interface RealtimeStat {
     title: string
@@ -15,63 +15,69 @@ interface RealtimeStat {
 const initialStats: RealtimeStat[] = [
     {
         title: "Active Users Right Now",
-        value: "247",
-        change: "+12",
+        value: "127",
+        change: "+8",
         changeType: "increase",
         icon: <Users className="h-4 w-4" />,
         live: true,
     },
     {
-        title: "Orders Today",
-        value: "1,284",
-        change: "+84",
+        title: "Published Posts Today",
+        value: "24",
+        change: "+5",
         changeType: "increase",
-        icon: <ShoppingCart className="h-4 w-4" />,
+        icon: <FileText className="h-4 w-4" />,
         live: true,
     },
     {
-        title: "Revenue Today",
-        value: "$12,480",
-        change: "+$1,240",
+        title: "New Comments",
+        value: "89",
+        change: "+12",
         changeType: "increase",
-        icon: <DollarSign className="h-4 w-4" />,
+        icon: <MessageSquare className="h-4 w-4" />,
         live: true,
     },
     {
-        title: "Server Load",
-        value: "42%",
-        change: "-3%",
-        changeType: "decrease",
-        icon: <Server className="h-4 w-4" />,
+        title: "Media Files Uploaded",
+        value: "156",
+        change: "+23",
+        changeType: "increase",
+        icon: <Image className="h-4 w-4" />,
         live: true,
     },
 ]
 
 const liveEvents = [
-    { id: 1, type: "order", message: "New order #12849 from John D.", time: "2s ago", amount: "$149.00" },
-    { id: 2, type: "user", message: "New user registered: sarah_m", time: "5s ago" },
-    { id: 3, type: "order", message: "Order #12848 completed", time: "12s ago", amount: "$89.00" },
-    { id: 4, type: "user", message: "User upgraded to Pro: mike_dev", time: "18s ago" },
-    { id: 5, type: "order", message: "New order #12847 from Alice W.", time: "25s ago", amount: "$234.00" },
-    { id: 6, type: "user", message: "New user registered: alex_r", time: "32s ago" },
-    { id: 7, type: "order", message: "Order #12846 refunded", time: "41s ago", amount: "$45.00" },
-    { id: 8, type: "user", message: "User subscription renewed", time: "55s ago" },
+    { id: 1, type: "post", message: "New article published: 'Getting Started with Next.js'", time: "2s ago", author: "John D." },
+    { id: 2, type: "comment", message: "New comment on 'React Best Practices'", time: "5s ago", author: "sarah_m" },
+    { id: 3, type: "media", message: "15 images uploaded to Media Library", time: "12s ago", author: "admin" },
+    { id: 4, type: "user", message: "New user registered: dev_alex", time: "18s ago" },
+    { id: 5, type: "comment", message: "Reply on 'CMS Tutorial'", time: "25s ago", author: "mike_w" },
+    { id: 6, type: "post", message: "Page updated: 'About Us'", time: "32s ago", author: "editor_1" },
+    { id: 7, type: "user", message: "User profile updated: jane_smith", time: "41s ago" },
+    { id: 8, type: "media", message: "Video uploaded: product-demo.mp4", time: "55s ago", author: "marketing" },
 ]
 
-const topProducts = [
-    { name: "Premium Subscription", sales: 124, revenue: "$12,400" },
-    { name: "Basic Plan", sales: 89, revenue: "$4,450" },
-    { name: "Enterprise License", sales: 45, revenue: "$22,500" },
-    { name: "Add-on: Analytics", sales: 67, revenue: "$3,350" },
-    { name: "Add-on: Storage", sales: 52, revenue: "$2,600" },
+const topPages = [
+    { page: "/blog/react-tips", views: 1247, avgTime: "3m 45s" },
+    { page: "/blog/nextjs-guide", views: 892, avgTime: "5m 12s" },
+    { page: "/", views: 756, avgTime: "1m 20s" },
+    { page: "/about", views: 534, avgTime: "2m 15s" },
+    { page: "/contact", views: 312, avgTime: "1m 45s" },
 ]
 
-const activePages = [
-    { page: "/dashboard", users: 89, avgTime: "4m 32s" },
-    { page: "/products", users: 67, avgTime: "2m 15s" },
-    { page: "/checkout", users: 34, avgTime: "1m 45s" },
-    { page: "/blog", users: 28, avgTime: "5m 12s" },
-    { page: "/settings", users: 12, avgTime: "1m 08s" },
+const recentComments = [
+    { id: 1, post: "Getting Started with Next.js", author: "dev_user", comment: "Great tutorial! This helped me a lot...", status: "approved" },
+    { id: 2, post: "React Best Practices", author: "newbie_coder", comment: "Can you explain more about hooks?", status: "pending" },
+    { id: 3, post: "CSS Tips & Tricks", author: "style_master", comment: "Love the dark mode implementation!", status: "approved" },
+    { id: 4, post: "JavaScript Fundamentals", author: "js_fan", comment: "Would love to see more examples...", status: "pending" },
+]
+
+const pendingActions = [
+    { id: 1, type: "comment", message: "3 comments awaiting moderation", icon: MessageCircle, count: 3 },
+    { id: 2, type: "draft", message: "5 posts in draft", icon: PenTool, count: 5 },
+    { id: 3, type: "upload", message: "2 media files pending review", icon: Upload, count: 2 },
+    { id: 4, type: "notification", message: "8 system notifications", icon: Bell, count: 8 },
 ]
 
 export default function RealtimeContent() {
@@ -92,26 +98,24 @@ export default function RealtimeContent() {
                         if (stat.title === "Active Users Right Now") {
                             const currentVal = parseInt(stat.value)
                             const change = Math.floor(Math.random() * 5) - 2
-                            const newVal = Math.max(200, currentVal + change)
+                            const newVal = Math.max(80, currentVal + change)
                             newValue = newVal.toString()
                             newChange = (change >= 0 ? "+" : "") + change.toString()
-                        } else if (stat.title === "Orders Today") {
-                            const currentVal = parseInt(stat.value.replace(/,/g, ""))
-                            const newVal = currentVal + Math.floor(Math.random() * 3)
-                            newValue = newVal.toLocaleString()
-                            newChange = "+" + Math.floor(Math.random() * 3).toString()
-                        } else if (stat.title === "Revenue Today") {
-                            const currentVal = parseInt(stat.value.replace(/[$,]/g, ""))
-                            const change = Math.floor(Math.random() * 50) + 10
-                            const newVal = currentVal + change
-                            newValue = "$" + newVal.toLocaleString()
-                            newChange = "+$" + change.toString()
-                        } else if (stat.title === "Server Load") {
+                        } else if (stat.title === "Published Posts Today") {
                             const currentVal = parseInt(stat.value)
-                            const change = Math.floor(Math.random() * 7) - 3
-                            const newVal = Math.max(20, Math.min(80, currentVal + change))
-                            newValue = newVal + "%"
-                            newChange = (change >= 0 ? "+" : "") + change + "%"
+                            const newVal = currentVal + (Math.random() > 0.8 ? 1 : 0)
+                            newValue = newVal.toString()
+                            newChange = "+" + (Math.random() > 0.8 ? 1 : 0).toString()
+                        } else if (stat.title === "New Comments") {
+                            const currentVal = parseInt(stat.value)
+                            const newVal = currentVal + Math.floor(Math.random() * 2)
+                            newValue = newVal.toString()
+                            newChange = "+" + Math.floor(Math.random() * 2).toString()
+                        } else if (stat.title === "Media Files Uploaded") {
+                            const currentVal = parseInt(stat.value)
+                            const newVal = currentVal + (Math.random() > 0.7 ? 1 : 0)
+                            newValue = newVal.toString()
+                            newChange = "+" + (Math.random() > 0.7 ? 1 : 0).toString()
                         }
 
                         return {
@@ -127,14 +131,19 @@ export default function RealtimeContent() {
 
             // Simulate new events occasionally
             if (Math.random() > 0.7) {
+                const eventTypes = ["post", "comment", "media", "user"] as const
                 const newEvent = {
                     id: Date.now(),
-                    type: Math.random() > 0.5 ? "order" : "user",
+                    type: eventTypes[Math.floor(Math.random() * eventTypes.length)],
                     message: Math.random() > 0.5
-                        ? `New order #${12850 + Math.floor(Math.random() * 100)} placed`
-                        : `New user registered: user_${Math.floor(Math.random() * 1000)}`,
+                        ? `New article published: 'Blog Post #${100 + Math.floor(Math.random() * 50)}'`
+                        : Math.random() > 0.5
+                            ? `New comment on recent post`
+                            : Math.random() > 0.5
+                                ? `Media file uploaded to library`
+                                : `New user registered: user_${Math.floor(Math.random() * 1000)}`,
                     time: "just now",
-                    amount: Math.random() > 0.5 ? "$" + (Math.floor(Math.random() * 200) + 50).toFixed(2) : undefined,
+                    author: Math.random() > 0.5 ? "admin" : "editor",
                 }
                 setEvents((prev) => [newEvent, ...prev.slice(0, 7)])
             }
@@ -149,7 +158,7 @@ export default function RealtimeContent() {
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div>
                     <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">Real-time Dashboard</h1>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Live data updates every 2 seconds</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Live CMS activity updates every 2 seconds</p>
                 </div>
                 <div className="flex items-center gap-2">
                     <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-sm ${isConnected ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400" : "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400"}`}>
@@ -207,7 +216,7 @@ export default function RealtimeContent() {
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
                                 <Zap className="h-5 w-5 text-yellow-500" />
-                                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Live Events</h2>
+                                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Live CMS Events</h2>
                                 <span className="px-2 py-0.5 text-xs font-medium bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 rounded-full">
                                     {events.length} events
                                 </span>
@@ -223,69 +232,97 @@ export default function RealtimeContent() {
                                     className="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-[#1F1F23] animate-in fade-in slide-in-from-top-2"
                                 >
                                     <div className="flex items-center gap-3 min-w-0">
-                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${event.type === "order" ? "bg-blue-100 dark:bg-blue-900/30" : "bg-purple-100 dark:bg-purple-900/30"}`}>
-                                            {event.type === "order" ? (
-                                                <ShoppingCart className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${event.type === "post" ? "bg-blue-100 dark:bg-blue-900/30" :
+                                            event.type === "comment" ? "bg-purple-100 dark:bg-purple-900/30" :
+                                                event.type === "media" ? "bg-green-100 dark:bg-green-900/30" :
+                                                    "bg-orange-100 dark:bg-orange-900/30"
+                                            }`}>
+                                            {event.type === "post" ? (
+                                                <FileText className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                                            ) : event.type === "comment" ? (
+                                                <MessageSquare className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+                                            ) : event.type === "media" ? (
+                                                <Image className="h-4 w-4 text-green-600 dark:text-green-400" />
                                             ) : (
-                                                <Users className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+                                                <Users className="h-4 w-4 text-orange-600 dark:text-orange-400" />
                                             )}
                                         </div>
                                         <div className="min-w-0">
                                             <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{event.message}</p>
-                                            <p className="text-xs text-gray-500 dark:text-gray-400">{event.time}</p>
+                                            <p className="text-xs text-gray-500 dark:text-gray-400">{event.time}{event.author && ` • by ${event.author}`}</p>
                                         </div>
                                     </div>
-                                    {event.amount && (
-                                        <span className="text-sm font-semibold text-green-600 dark:text-green-400 flex-shrink-0">{event.amount}</span>
-                                    )}
                                 </div>
                             ))}
                         </div>
                     </div>
                 </div>
 
-                {/* Active Pages */}
-                <div className="bg-white dark:bg-[#0F0F12] rounded-lg sm:rounded-xl border border-gray-200 dark:border-[#1F1F23]">
-                    <div className="p-4 sm:p-6 border-b border-gray-200 dark:border-[#1F1F23]">
-                        <div className="flex items-center gap-2">
-                            <Activity className="h-5 w-5 text-blue-500" />
-                            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Active Pages</h2>
+                {/* Pending Actions */}
+                <div className="space-y-4 sm:space-y-6">
+                    {/* Pending Actions Card */}
+                    <div className="bg-white dark:bg-[#0F0F12] rounded-lg sm:rounded-xl border border-gray-200 dark:border-[#1F1F23]">
+                        <div className="p-4 sm:p-6 border-b border-gray-200 dark:border-[#1F1F23]">
+                            <div className="flex items-center gap-2">
+                                <Clock className="h-5 w-5 text-orange-500" />
+                                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Pending Actions</h2>
+                            </div>
+                        </div>
+                        <div className="p-4 sm:p-6">
+                            <div className="space-y-4">
+                                {pendingActions.map((action) => (
+                                    <div key={action.id} className="flex items-center justify-between">
+                                        <div className="flex items-center gap-3 min-w-0">
+                                            <div className="w-8 h-8 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center flex-shrink-0">
+                                                <action.icon className="h-4 w-4 text-orange-600 dark:text-orange-400" />
+                                            </div>
+                                            <p className="text-sm text-gray-900 dark:text-white truncate">{action.message}</p>
+                                        </div>
+                                        <span className="text-sm font-semibold text-orange-600 dark:text-orange-400 flex-shrink-0">{action.count}</span>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
-                    <div className="p-4 sm:p-6">
-                        <div className="space-y-4">
-                            {activePages.map((page, index) => (
-                                <div key={page.page} className="flex items-center justify-between">
-                                    <div className="flex items-center gap-3 min-w-0">
-                                        <span className="text-sm font-medium text-gray-400 dark:text-gray-500 w-4">{index + 1}</span>
-                                        <div className="min-w-0">
-                                            <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{page.page}</p>
-                                            <p className="text-xs text-gray-500 dark:text-gray-400">Avg: {page.avgTime}</p>
+
+                    {/* Recent Comments */}
+                    <div className="bg-white dark:bg-[#0F0F12] rounded-lg sm:rounded-xl border border-gray-200 dark:border-[#1F1F23]">
+                        <div className="p-4 sm:p-6 border-b border-gray-200 dark:border-[#1F1F23]">
+                            <div className="flex items-center gap-2">
+                                <MessageSquare className="h-5 w-5 text-purple-500" />
+                                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Recent Comments</h2>
+                            </div>
+                        </div>
+                        <div className="p-4 sm:p-6">
+                            <div className="space-y-4">
+                                {recentComments.map((comment) => (
+                                    <div key={comment.id} className="space-y-2">
+                                        <div className="flex items-center justify-between">
+                                            <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{comment.post}</p>
+                                            <span className={`px-2 py-0.5 text-xs rounded-full ${comment.status === "approved"
+                                                ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400"
+                                                : "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400"
+                                                }`}>
+                                                {comment.status}
+                                            </span>
                                         </div>
+                                        <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2">{comment.comment}</p>
+                                        <p className="text-xs text-gray-400 dark:text-gray-500">by {comment.author}</p>
                                     </div>
-                                    <div className="flex items-center gap-2 flex-shrink-0">
-                                        <div className="w-16 h-2 bg-gray-200 dark:bg-[#1F1F23] rounded-full overflow-hidden">
-                                            <div
-                                                className="h-full bg-blue-500 rounded-full"
-                                                style={{ width: `${(page.users / 100) * 100}%` }}
-                                            />
-                                        </div>
-                                        <span className="text-sm font-medium text-gray-900 dark:text-white w-8 text-right">{page.users}</span>
-                                    </div>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Top Products Realtime */}
+            {/* Top Pages Realtime */}
             <div className="bg-white dark:bg-[#0F0F12] rounded-lg sm:rounded-xl border border-gray-200 dark:border-[#1F1F23]">
                 <div className="p-4 sm:p-6 border-b border-gray-200 dark:border-[#1F1F23]">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                            <TrendingUp className="h-5 w-5 text-green-500" />
-                            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Top Products (Today)</h2>
+                            <Eye className="h-5 w-5 text-blue-500" />
+                            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Most Viewed Pages (Today)</h2>
                         </div>
                         <span className="text-sm text-gray-500 dark:text-gray-400">Live updates</span>
                     </div>
@@ -294,19 +331,19 @@ export default function RealtimeContent() {
                     <table className="w-full">
                         <thead>
                             <tr className="border-b border-gray-200 dark:border-[#1F1F23]">
-                                <th className="text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider px-6 py-3">Product</th>
-                                <th className="text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider px-6 py-3">Sales</th>
-                                <th className="text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider px-6 py-3">Revenue</th>
+                                <th className="text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider px-6 py-3">Page</th>
+                                <th className="text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider px-6 py-3">Views</th>
+                                <th className="text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider px-6 py-3">Avg. Time</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-200 dark:divide-[#1F1F23]">
-                            {topProducts.map((product) => (
-                                <tr key={product.name} className="hover:bg-gray-50 dark:hover:bg-[#1F1F23] transition-colors">
+                            {topPages.map((page) => (
+                                <tr key={page.page} className="hover:bg-gray-50 dark:hover:bg-[#1F1F23] transition-colors">
                                     <td className="px-6 py-4 whitespace-nowrap">
-                                        <span className="text-sm font-medium text-gray-900 dark:text-white">{product.name}</span>
+                                        <span className="text-sm font-medium text-gray-900 dark:text-white">{page.page}</span>
                                     </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-600 dark:text-gray-400">{product.sales}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-semibold text-green-600 dark:text-green-400">{product.revenue}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-600 dark:text-gray-400">{page.views.toLocaleString()}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-600 dark:text-gray-400">{page.avgTime}</td>
                                 </tr>
                             ))}
                         </tbody>

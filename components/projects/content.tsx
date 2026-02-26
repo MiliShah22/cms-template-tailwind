@@ -1,7 +1,28 @@
+"use client"
+
+import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import { Label } from "@/components/ui/label"
 import { Folder, Plus, Calendar, Users, Clock, ArrowRight } from "lucide-react"
 
 const projects = [
@@ -75,10 +96,33 @@ const priorityColors: Record<string, string> = {
 }
 
 export function ProjectsContent() {
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [newProject, setNewProject] = useState({
+    name: "",
+    description: "",
+    status: "planning",
+    priority: "medium",
+    dueDate: "",
+  })
+
   const activeProjects = projects.filter((p) => p.status !== "completed").length
   const completedProjects = projects.filter((p) => p.status === "completed").length
   const totalTasks = projects.reduce((acc, p) => acc + p.tasks.total, 0)
   const completedTasks = projects.reduce((acc, p) => acc + p.tasks.completed, 0)
+
+  const handleSaveProject = () => {
+    // Handle save logic here
+    console.log("Saving project:", newProject)
+    setIsDialogOpen(false)
+    // Reset form
+    setNewProject({
+      name: "",
+      description: "",
+      status: "planning",
+      priority: "medium",
+      dueDate: "",
+    })
+  }
 
   return (
     <div className="space-y-6">
@@ -95,12 +139,94 @@ export function ProjectsContent() {
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <Button size="sm" className="gap-2">
+          <Button size="sm" className="gap-2" onClick={() => setIsDialogOpen(true)}>
             <Plus className="h-4 w-4" />
             New Project
           </Button>
         </div>
       </div>
+
+      {/* New Project Dialog */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Create New Project</DialogTitle>
+            <DialogDescription>
+              Enter the basic details for your new project.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="name">Project Name</Label>
+              <Input
+                id="name"
+                placeholder="Enter project name"
+                value={newProject.name}
+                onChange={(e) => setNewProject({ ...newProject, name: e.target.value })}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="description">Description</Label>
+              <Textarea
+                id="description"
+                placeholder="Enter project description"
+                value={newProject.description}
+                onChange={(e) => setNewProject({ ...newProject, description: e.target.value })}
+                rows={3}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="status">Status</Label>
+                <Select
+                  value={newProject.status}
+                  onValueChange={(value) => setNewProject({ ...newProject, status: value })}
+                >
+                  <SelectTrigger id="status">
+                    <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="planning">Planning</SelectItem>
+                    <SelectItem value="in-progress">In Progress</SelectItem>
+                    <SelectItem value="completed">Completed</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="priority">Priority</Label>
+                <Select
+                  value={newProject.priority}
+                  onValueChange={(value) => setNewProject({ ...newProject, priority: value })}
+                >
+                  <SelectTrigger id="priority">
+                    <SelectValue placeholder="Select priority" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="low">Low</SelectItem>
+                    <SelectItem value="medium">Medium</SelectItem>
+                    <SelectItem value="high">High</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="dueDate">Due Date</Label>
+              <Input
+                id="dueDate"
+                type="date"
+                value={newProject.dueDate}
+                onChange={(e) => setNewProject({ ...newProject, dueDate: e.target.value })}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleSaveProject}>Create Project</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Stats */}
       <div className="grid gap-4 md:grid-cols-4">
@@ -165,10 +291,10 @@ export function ProjectsContent() {
                   <Badge
                     variant="outline"
                     className={`${project.status === "completed"
-                        ? "border-green-500 text-green-700"
-                        : project.status === "in-progress"
-                          ? "border-blue-500 text-blue-700"
-                          : "border-yellow-500 text-yellow-700"
+                      ? "border-green-500 text-green-700"
+                      : project.status === "in-progress"
+                        ? "border-blue-500 text-blue-700"
+                        : "border-yellow-500 text-yellow-700"
                       }`}
                   >
                     {project.status.replace("-", " ")}

@@ -105,12 +105,12 @@ const menuData: MenuSection[] = [
         icon: Home,
         badge: "3",
         children: [
-          {
-            id: "analytics",
-            label: "Analytics",
-            href: "/dashboard/analytics",
-            icon: BarChart2,
-          },
+          // {
+          //   id: "analytics",
+          //   label: "Analytics",
+          //   href: "/dashboard/analytics",
+          //   icon: BarChart2,
+          // },
           {
             id: "reports",
             label: "Reports",
@@ -782,13 +782,13 @@ export default function Sidebar() {
   // Export functions to window for TopNav and ThemeCustomizer to access
   useEffect(() => {
     if (typeof window !== "undefined") {
-      ;(window as any).toggleMenuState = toggleMenuState
-      ;(window as any).menuState = menuState
-      ;(window as any).isHovered = isHovered
-      ;(window as any).isMobile = isMobile
-      ;(window as any).setIsMobileMenuOpen = setIsMobileMenuOpen
-      ;(window as any).isMobileMenuOpen = isMobileMenuOpen
-      ;(window as any).setMenuStateFromCustomizer = setMenuStateFromCustomizer
+      ; (window as any).toggleMenuState = toggleMenuState
+        ; (window as any).menuState = menuState
+        ; (window as any).isHovered = isHovered
+        ; (window as any).isMobile = isMobile
+        ; (window as any).setIsMobileMenuOpen = setIsMobileMenuOpen
+        ; (window as any).isMobileMenuOpen = isMobileMenuOpen
+        ; (window as any).setMenuStateFromCustomizer = setMenuStateFromCustomizer
     }
   }, [menuState, isHovered, isMobile, isMobileMenuOpen])
 
