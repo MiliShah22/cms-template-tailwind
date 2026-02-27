@@ -45,3 +45,5 @@ package-lock.json text eol=lf
 # Exclude generated files from language statistics
 *.min.js linguist-language=JavaScript
 *.min.css linguist-language=CSS
+
+* text=auto
