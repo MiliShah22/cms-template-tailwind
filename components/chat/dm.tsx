@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -80,6 +80,32 @@ const dmMessages: DirectMessage[] = [
 export function ChatDM() {
   const [activeThreadId, setActiveThreadId] = useState<string>("cody")
   const [draft, setDraft] = useState("")
+  const [imageLoading, setImageLoading] = useState<Record<string, boolean>>({})
+
+  // Initialize loading state for all threads
+  useEffect(() => {
+    const initialLoading: Record<string, boolean> = {}
+    threads.forEach(thread => {
+      initialLoading[thread.id] = true
+    })
+    setImageLoading(initialLoading)
+
+    // Force loading state to false after a timeout to prevent stuck shimmer
+    const timeout = setTimeout(() => {
+      setImageLoading(prev => {
+        const updated = { ...prev }
+        Object.keys(updated).forEach(key => {
+          if (updated[key] === true) {
+            updated[key] = false
+          }
+        })
+        return updated
+      })
+    }, 3000) // 3 seconds timeout
+
+    return () => clearTimeout(timeout)
+  }, [])
+
 
   const activeThread = threads.find((t) => t.id === activeThreadId) ?? threads[0]
   const visibleMessages = dmMessages.filter((m) => m.threadId === activeThreadId)
@@ -114,10 +140,7 @@ export function ChatDM() {
                     key={thread.id}
                     type="button"
                     onClick={() => setActiveThreadId(thread.id)}
-                    className={`
-                      flex w-full items-center justify-between rounded-md px-2 py-1.5 text-left text-xs
-                      ${isActive ? "bg-emerald-50 text-emerald-800 dark:bg-emerald-500/10 dark:text-emerald-200" : "hover:bg-gray-50 dark:hover:bg-gray-900/40"}
-                    `}
+                    className={`flex w-full items-center justify-between rounded-md px-2 py-1.5 text-left text-xs ${isActive ? "bg-emerald-50 text-emerald-800 dark:bg-emerald-500/10 dark:text-emerald-200" : "hover:bg-gray-50 dark:hover:bg-gray-900/40"}`}
                   >
                     <div className="flex items-center gap-2">
                       <Avatar className="h-7 w-7">
