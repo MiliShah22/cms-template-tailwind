@@ -7,50 +7,34 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Search, Package, Tag, Filter, Plus, TrendingUp } from "lucide-react"
 
-const products = [
-  {
-    id: "PRD-1024",
-    name: "CMS Starter Plan",
-    sku: "CMS-ST-01",
-    category: "Subscriptions",
-    price: "$19.00",
-    stock: 243,
-    status: "active",
-    trend: "+12%",
-  },
-  {
-    id: "PRD-1008",
-    name: "CMS Pro Plan",
-    sku: "CMS-PR-01",
-    category: "Subscriptions",
-    price: "$49.00",
-    stock: 88,
-    status: "active",
-    trend: "+7%",
-  },
-  {
-    id: "PRD-0992",
-    name: "SEO Toolkit Addon",
-    sku: "ADD-SEO-01",
-    category: "Addons",
-    price: "$9.00",
-    stock: 510,
-    status: "active",
-    trend: "+23%",
-  },
-  {
-    id: "PRD-0975",
-    name: "Analytics Upgrade",
-    sku: "ADD-ANALYTICS",
-    category: "Addons",
-    price: "$15.00",
-    stock: 132,
-    status: "draft",
-    trend: "-",
-  },
-]
+import { getProducts, getCategorySlugs, getDisplayName, Product } from "@/lib/products"
 
-export function ProductsContent() {
+const products: Product[] = getProducts()
+
+interface ProductsContentProps {
+  filterCategory?: string
+  hideTabs?: boolean
+}
+
+export function ProductsContent({
+  filterCategory,
+  hideTabs = false,
+}: ProductsContentProps) {
+  // if a filter category was provided it may come from a slug (lowercase)
+  // convert to display form so the table filtering works with our mock data
+  const displayCategory = filterCategory
+    ?
+    // simple capitalise first letter for basic slugs
+    filterCategory.charAt(0).toUpperCase() + filterCategory.slice(1)
+    : undefined
+
+  // compute stats from the product list
+  const allProducts = getProducts()
+  const activeCount = allProducts.filter((p) => p.status === "active").length
+  const lowStockCount = allProducts.filter((p) => p.stock < 100).length
+  // placeholder trend: calculate % of active increasing vs decreasing?
+  const revenueTrend = "+14.3%" // could be derived from real data
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -60,9 +44,13 @@ export function ProductsContent() {
             <Package className="h-4 w-4" />
             Catalog
           </div>
-          <h1 className="mt-1 text-2xl font-bold text-gray-900 dark:text-white">Products</h1>
+          <h1 className="mt-1 text-2xl font-bold text-gray-900 dark:text-white">
+            {displayCategory ? `${displayCategory} products` : "Products"}
+          </h1>
           <p className="text-sm text-gray-600 dark:text-gray-400">
-            Manage your product catalog, pricing and availability across channels.
+            {displayCategory
+              ? `Showing all items in the ${displayCategory} category.`
+              : "Manage your product catalog, pricing and availability across channels."}
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
@@ -84,7 +72,7 @@ export function ProductsContent() {
             <CardTitle className="text-sm font-medium">Active products</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-semibold">32</div>
+            <div className="text-2xl font-semibold">{activeCount}</div>
             <p className="mt-1 text-xs text-gray-500">Visible in the storefront</p>
           </CardContent>
         </Card>
@@ -93,7 +81,7 @@ export function ProductsContent() {
             <CardTitle className="text-sm font-medium">Low stock</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-semibold">5</div>
+            <div className="text-2xl font-semibold">{lowStockCount}</div>
             <p className="mt-1 text-xs text-gray-500">Below safety threshold</p>
           </CardContent>
         </Card>
@@ -105,7 +93,7 @@ export function ProductsContent() {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-semibold">+14.3%</div>
+            <div className="text-2xl font-semibold">{revenueTrend}</div>
             <p className="mt-1 text-xs text-gray-500">Last 30 days vs previous</p>
           </CardContent>
         </Card>
@@ -143,29 +131,41 @@ export function ProductsContent() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All categories</SelectItem>
-                  <SelectItem value="subscriptions">Subscriptions</SelectItem>
-                  <SelectItem value="addons">Addons</SelectItem>
+                  {getCategorySlugs().map((slug) => (
+                    <SelectItem key={slug} value={slug}>
+                      {getDisplayName(slug)}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
           </div>
 
-          <Tabs defaultValue="all" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 sm:w-auto">
-              <TabsTrigger value="all">All products</TabsTrigger>
-              <TabsTrigger value="subscriptions">Subscriptions</TabsTrigger>
-              <TabsTrigger value="addons">Addons</TabsTrigger>
-            </TabsList>
-            <TabsContent value="all" className="pt-4">
-              <ProductsTable />
-            </TabsContent>
-            <TabsContent value="subscriptions" className="pt-4">
-              <ProductsTable filterCategory="Subscriptions" />
-            </TabsContent>
-            <TabsContent value="addons" className="pt-4">
-              <ProductsTable filterCategory="Addons" />
-            </TabsContent>
-          </Tabs>
+          {!hideTabs && (
+            <Tabs defaultValue="all" className="w-full">
+              <TabsList className="grid w-full grid-cols-3 sm:w-auto">
+                <TabsTrigger value="all">All products</TabsTrigger>
+                {getCategorySlugs().map((slug) => (
+                  <TabsTrigger key={slug} value={slug}>
+                    {getDisplayName(slug)}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+              <TabsContent value="all" className="pt-4">
+                <ProductsTable />
+              </TabsContent>
+              {getCategorySlugs().map((slug) => (
+                <TabsContent key={slug} value={slug} className="pt-4">
+                  <ProductsTable filterCategory={getDisplayName(slug)} />
+                </TabsContent>
+              ))}
+            </Tabs>
+          )}
+          {hideTabs && (
+            <div className="pt-4">
+              <ProductsTable filterCategory={displayCategory} />
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
@@ -176,7 +176,7 @@ interface ProductsTableProps {
   filterCategory?: string
 }
 
-function ProductsTable({ filterCategory }: ProductsTableProps) {
+export function ProductsTable({ filterCategory }: ProductsTableProps) {
   const rows = filterCategory
     ? products.filter((p) => p.category === filterCategory)
     : products

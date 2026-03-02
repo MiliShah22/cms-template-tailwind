@@ -13,6 +13,12 @@ interface OrderDetailPageProps {
     }
 }
 
+import { getOrders } from "@/lib/orders"
+
+export function generateStaticParams() {
+    return getOrders().map((o) => ({ id: o.id }))
+}
+
 export default function OrderDetailPage({ params }: OrderDetailPageProps) {
     return (
         <Layout>

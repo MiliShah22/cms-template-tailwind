@@ -29,6 +29,8 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { generateInvoicePDF, generatePrintableOrder } from "@/lib/pdf-generator"
+import { getOrderById } from "@/lib/orders"
+import { getCustomers } from "@/lib/customers"
 
 // Sample product catalog for generating order items
 const sampleProducts = [
@@ -539,8 +541,8 @@ interface OrderDetailContentProps {
 }
 
 export function OrderDetailContent({ orderId }: OrderDetailContentProps) {
-    // Use hardcoded data if available, otherwise generate dynamic data
-    const order = ordersData[orderId] || generateOrderData(orderId)
+    // Lookup data from JSON, fall back to generated sample if not found
+    const order = getOrderById(orderId) || generateOrderData(orderId)
 
     return (
         <div className="space-y-6">
@@ -761,9 +763,17 @@ export function OrderDetailContent({ orderId }: OrderDetailContentProps) {
                                 </Avatar>
                                 <div className="flex-1 min-w-0">
                                     <p className="text-sm font-medium">{order.customer.name}</p>
-                                    <Link href="/customers/all" className="text-xs text-primary hover:underline">
-                                        View Profile
-                                    </Link>
+                                    {
+                                        (() => {
+                                            const cust = getCustomers().find(c => c.email === order.customer.email)
+                                            const href = cust ? `/customers/${cust.id}` : "/customers/all"
+                                            return (
+                                                <Link href={href} className="text-xs text-primary hover:underline">
+                                                    View Profile
+                                                </Link>
+                                            )
+                                        })()
+                                    }
                                 </div>
                             </div>
                             <div className="space-y-3">

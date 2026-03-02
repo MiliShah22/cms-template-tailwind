@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -7,52 +8,16 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Package, Tag, Eye } from "lucide-react"
 import Link from "next/link"
 
+import { getProducts, Product } from "@/lib/products"
 
-
-const products = [
-    {
-        id: "PRD-1024",
-        name: "CMS Starter Plan",
-        sku: "CMS-ST-01",
-        category: "Subscriptions",
-        price: "$19.00",
-        stock: 243,
-        status: "active",
-        trend: "+12%",
-    },
-    {
-        id: "PRD-1008",
-        name: "CMS Pro Plan",
-        sku: "CMS-PR-01",
-        category: "Subscriptions",
-        price: "$49.00",
-        stock: 88,
-        status: "active",
-        trend: "+7%",
-    },
-    {
-        id: "PRD-0992",
-        name: "SEO Toolkit Addon",
-        sku: "ADD-SEO-01",
-        category: "Addons",
-        price: "$9.00",
-        stock: 510,
-        status: "active",
-        trend: "+23%",
-    },
-    {
-        id: "PRD-0975",
-        name: "Analytics Upgrade",
-        sku: "ADD-ANALYTICS",
-        category: "Addons",
-        price: "$15.00",
-        stock: 132,
-        status: "draft",
-        trend: "-",
-    },
-]
+const products: Product[] = getProducts()
 
 export function AllProductsContent() {
+    const [currentPage, setCurrentPage] = useState(1)
+    const pageSize = 5
+    const totalPages = Math.ceil(products.length / pageSize)
+    const pagedProducts = products.slice((currentPage - 1) * pageSize, currentPage * pageSize)
+
     return (
         <div className="space-y-6">
             {/* Header */}
@@ -118,7 +83,7 @@ export function AllProductsContent() {
 
                             </TableHeader>
                             <TableBody>
-                                {products.map((product) => (
+                                {pagedProducts.map((product) => (
                                     <TableRow key={product.id}>
                                         <TableCell className="font-medium">
                                             <div className="flex items-center gap-2">
@@ -163,6 +128,26 @@ export function AllProductsContent() {
                                 ))}
                             </TableBody>
                         </Table>
+                    </div>
+                    {/* pagination controls */}
+                    <div className="flex justify-between items-center mt-4">
+                        <Button
+                            size="sm"
+                            disabled={currentPage === 1}
+                            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                        >
+                            Previous
+                        </Button>
+                        <span className="text-sm text-gray-600">
+                            Page {currentPage} of {totalPages}
+                        </span>
+                        <Button
+                            size="sm"
+                            disabled={currentPage === totalPages}
+                            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                        >
+                            Next
+                        </Button>
                     </div>
                 </CardContent>
             </Card>

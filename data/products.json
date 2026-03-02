@@ -1,0 +1,72 @@
+[
+    {
+        "id": "PRD-1024",
+        "name": "CMS Starter Plan",
+        "sku": "CMS-ST-01",
+        "category": "Subscriptions",
+        "price": "$19.00",
+        "stock": 243,
+        "status": "active",
+        "trend": "+12%"
+    },
+    {
+        "id": "PRD-1008",
+        "name": "CMS Pro Plan",
+        "sku": "CMS-PR-01",
+        "category": "Subscriptions",
+        "price": "$49.00",
+        "stock": 88,
+        "status": "active",
+        "trend": "+7%"
+    },
+    {
+        "id": "PRD-0992",
+        "name": "SEO Toolkit Addon",
+        "sku": "ADD-SEO-01",
+        "category": "Addons",
+        "price": "$9.00",
+        "stock": 510,
+        "status": "active",
+        "trend": "+23%"
+    },
+    {
+        "id": "PRD-0975",
+        "name": "Analytics Upgrade",
+        "sku": "ADD-ANALYTICS",
+        "category": "Addons",
+        "price": "$15.00",
+        "stock": 132,
+        "status": "draft",
+        "trend": "-"
+    },
+    {
+        "id": "PRD-2001",
+        "name": "Smartphone",
+        "sku": "ELEC-001",
+        "category": "Electronics",
+        "price": "$299.00",
+        "stock": 50,
+        "status": "active",
+        "trend": "+5%"
+    },
+    {
+        "id": "PRD-2002",
+        "name": "T-Shirt",
+        "sku": "CLOT-101",
+        "category": "Clothing",
+        "price": "$19.99",
+        "stock": 120,
+        "status": "active",
+        "trend": "+2%"
+    },
+    {
+        "id": "PRD-2003",
+        "name": "Book: Learn JS",
+        "sku": "BOOK-201",
+        "category": "Books",
+        "price": "$29.00",
+        "stock": 75,
+        "status": "active",
+        "trend": "+8%"
+    }
+]

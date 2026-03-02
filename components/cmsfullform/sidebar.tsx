@@ -64,6 +64,9 @@ import {
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { cn } from "@/lib/utils"
+import { getCategorySlugs, getDisplayName } from "@/lib/products"
+import { getOrders, Order } from "@/lib/orders"
+import { getSegmentCounts } from "@/lib/customers"
 
 type MenuState = "full" | "collapsed" | "hidden"
 
@@ -91,6 +94,16 @@ interface MenuSection {
   id: string
   label: string
   items: MenuItem[]
+}
+
+// compute some dynamic counts
+const orders: Order[] = getOrders()
+const orderCounts = {
+  total: orders.length,
+  pending: orders.filter((o) => o.status === "pending").length,
+  processing: orders.filter((o) => o.status === "processing").length,
+  shipped: orders.filter((o) => o.status === "shipped").length,
+  delivered: orders.filter((o) => o.status === "delivered").length,
 }
 
 const menuData: MenuSection[] = [
@@ -208,26 +221,19 @@ const menuData: MenuSection[] = [
             label: "Categories",
             href: "/products/categories",
             icon: Tag,
-            children: [
-              {
-                id: "electronics",
-                label: "Electronics",
-                href: "/products/categories/electronics",
-                icon: Monitor,
-              },
-              {
-                id: "clothing",
-                label: "Clothing",
-                href: "/products/categories/clothing",
-                icon: ShoppingCart,
-              },
-              {
-                id: "books",
-                label: "Books",
-                href: "/products/categories/books",
-                icon: FileText,
-              },
-            ],
+            children: getCategorySlugs().map((slug) => ({
+              id: slug,
+              label: getDisplayName(slug),
+              href: `/products/categories/${slug}`,
+              icon: // small icon mapping
+                slug === "electronics"
+                  ? Monitor
+                  : slug === "clothing"
+                    ? ShoppingCart
+                    : slug === "books"
+                      ? FileText
+                      : Tag,
+            })),
           },
           {
             id: "inventory",
@@ -248,7 +254,7 @@ const menuData: MenuSection[] = [
         label: "Orders",
         href: "/orders",
         icon: ShoppingCart,
-        badge: "5",
+        badge: String(orderCounts.total),
         children: [
           {
             id: "all-orders",
@@ -261,28 +267,32 @@ const menuData: MenuSection[] = [
             label: "Pending",
             href: "/orders/pending",
             icon: Clock,
-            badge: "3",
+            badge: String(orderCounts.pending),
           },
           {
             id: "processing",
             label: "Processing",
             href: "/orders/processing",
             icon: Timer,
+            badge: String(orderCounts.processing),
           },
           {
             id: "shipped",
             label: "Shipped",
             href: "/orders/shipped",
             icon: Truck,
+            badge: String(orderCounts.shipped),
           },
           {
             id: "delivered",
             label: "Delivered",
             href: "/orders/delivered",
             icon: Check,
+            badge: String(orderCounts.delivered),
           },
         ],
       },
+
       {
         id: "customers",
         label: "Customers",
@@ -294,6 +304,7 @@ const menuData: MenuSection[] = [
             label: "All Customers",
             href: "/customers/all",
             icon: Users2,
+            badge: String(Object.values(getSegmentCounts()).reduce((a, b) => a + b, 0)),
           },
           {
             id: "segments",
@@ -306,18 +317,21 @@ const menuData: MenuSection[] = [
                 label: "VIP Customers",
                 href: "/customers/segments/vip",
                 icon: Star,
+                badge: String(getSegmentCounts().vip || 0),
               },
               {
                 id: "new",
                 label: "New Customers",
                 href: "/customers/segments/new",
                 icon: UserPlus,
+                badge: String(getSegmentCounts().new || 0),
               },
               {
                 id: "inactive",
                 label: "Inactive",
                 href: "/customers/segments/inactive",
                 icon: UserX,
+                badge: String(getSegmentCounts().inactive || 0),
               },
             ],
           },
@@ -844,7 +858,9 @@ export default function Sidebar() {
         }}
         title={menuState === "collapsed" && !isHovered && !isMobile ? item.label : undefined}
       >
-        <item.icon className="h-4 w-4 flex-shrink-0 sidebar-menu-icon" />
+        {item.icon && (
+          <item.icon className="h-4 w-4 flex-shrink-0 sidebar-menu-icon" />
+        )}
 
         {showText && (
           <>

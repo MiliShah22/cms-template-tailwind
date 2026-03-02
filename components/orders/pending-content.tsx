@@ -1,5 +1,6 @@
 "use client"
 
+import { useMemo, useState } from "react"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -7,43 +8,52 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { Clock, Filter, RefreshCw } from "lucide-react"
+import { getOrders, Order } from "@/lib/orders"
+import { exportOrdersCSV, OrderData } from "@/components/shared/order-table"
 
-const mockPendingOrders = [
-  {
-    id: "ORD-1024",
-    customer: "Jane Cooper",
-    total: "$248.90",
-    items: 5,
-    createdAt: "2024-02-10 09:24",
-    age: "32m ago",
-  },
-  {
-    id: "ORD-1023",
-    customer: "Cody Fisher",
-    total: "$89.00",
-    items: 2,
-    createdAt: "2024-02-10 09:12",
-    age: "44m ago",
-  },
-  {
-    id: "ORD-1022",
-    customer: "Kristin Watson",
-    total: "$1,204.50",
-    items: 12,
-    createdAt: "2024-02-10 08:58",
-    age: "58m ago",
-  },
-  {
-    id: "ORD-1021",
-    customer: "Devon Lane",
-    total: "$39.99",
-    items: 1,
-    createdAt: "2024-02-10 08:40",
-    age: "1h 16m ago",
-  },
-]
+function calcAge(created: string): string {
+  const then = new Date(created)
+  const now = new Date()
+  const diff = now.getTime() - then.getTime()
+  const minutes = Math.floor(diff / 60000)
+  if (minutes < 60) return `${minutes}m ago`
+  const hours = Math.floor(minutes / 60)
+  return `${hours}h ${minutes % 60}m ago`
+}
 
 export function PendingOrdersContent() {
+  const orders: Order[] = getOrders().filter((o) => o.status === "pending")
+  const totalPending = orders.length
+  // shape for table and export
+  const orderList: OrderData[] = orders.map((o) => ({
+    id: o.id,
+    customer: o.customer.name,
+    total: o.total,
+    items: o.items.length,
+    createdAt: o.createdAt,
+    status: o.status,
+  }))
+
+  // pagination for table rows
+  const [currentPage, setCurrentPage] = useState(1)
+  const pageSize = 5
+  const totalPages = Math.ceil(orderList.length / pageSize)
+  const pagedOrders = orderList.slice((currentPage - 1) * pageSize, currentPage * pageSize)
+  const avgValue = useMemo(() => {
+    if (orders.length === 0) return 0
+    const sum = orders.reduce((sum, o) => sum + parseFloat(o.total.replace(/[$,]/g, "")), 0)
+    return sum / orders.length
+  }, [orders])
+  const oldest = useMemo(() => {
+    if (orders.length === 0) return "0m"
+    const times = orders.map((o) => new Date(o.createdAt).getTime())
+    const min = Math.min(...times)
+    const diff = Date.now() - min
+    const h = Math.floor(diff / 3600000)
+    const m = Math.floor((diff % 3600000) / 60000)
+    return `${h}h ${m}m`
+  }, [orders])
+
   return (
     <div className="space-y-6">
       {/* Page header */}
@@ -63,6 +73,13 @@ export function PendingOrdersContent() {
             <RefreshCw className="h-4 w-4" />
             Refresh
           </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => exportOrdersCSV(orderList, "pending-orders.csv")}
+          >
+            Export
+          </Button>
           <Button size="sm" className="gap-2">
             Process selected
           </Button>
@@ -77,7 +94,7 @@ export function PendingOrdersContent() {
             <Badge variant="secondary">Live</Badge>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-semibold">24</div>
+            <div className="text-2xl font-semibold">{totalPending}</div>
             <p className="mt-1 text-xs text-gray-500">Across all sales channels</p>
           </CardContent>
         </Card>
@@ -87,7 +104,7 @@ export function PendingOrdersContent() {
             <CardTitle className="text-sm font-medium">Average order value</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-semibold">$184.32</div>
+            <div className="text-2xl font-semibold">${avgValue.toFixed(2)}</div>
             <p className="mt-1 text-xs text-gray-500">Last 24 hours</p>
           </CardContent>
         </Card>
@@ -97,7 +114,7 @@ export function PendingOrdersContent() {
             <CardTitle className="text-sm font-medium">Oldest pending</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-semibold">3h 12m</div>
+            <div className="text-2xl font-semibold">{oldest}</div>
             <p className="mt-1 text-xs text-amber-600 dark:text-amber-400">
               Consider following up with the customer
             </p>
@@ -164,7 +181,7 @@ export function PendingOrdersContent() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {mockPendingOrders.map((order) => (
+                {pagedOrders.map((order) => (
                   <TableRow key={order.id}>
                     <TableCell className="font-medium">
                       <div className="flex items-center gap-2">
@@ -184,7 +201,7 @@ export function PendingOrdersContent() {
                     </TableCell>
                     <TableCell className="text-right font-medium">{order.total}</TableCell>
                     <TableCell className="hidden sm:table-cell text-right text-xs text-gray-500">
-                      {order.age}
+                      {calcAge(order.createdAt)}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -193,6 +210,29 @@ export function PendingOrdersContent() {
           </div>
         </CardContent>
       </Card>
+
+      {/* pagination controls */}
+      {totalPages > 1 && (
+        <div className="flex justify-between items-center mt-4">
+          <Button
+            size="sm"
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+          >
+            Previous
+          </Button>
+          <span className="text-sm text-gray-600">
+            Page {currentPage} of {totalPages}
+          </span>
+          <Button
+            size="sm"
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+          >
+            Next
+          </Button>
+        </div>
+      )}
     </div>
   )
 }

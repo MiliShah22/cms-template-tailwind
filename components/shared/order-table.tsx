@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -24,6 +25,24 @@ interface OrderTableProps {
   orders: OrderData[]
 }
 
+// helper to export orders to CSV
+export function exportOrdersCSV(orders: OrderData[], fileName = "orders.csv") {
+  const headers = ["Order ID", "Customer", "Total", "Items", "Created At", "Status"]
+  const rows = orders.map((o) => [o.id, o.customer, o.total, o.items.toString(), o.createdAt || "", o.status || ""])
+  const csvContent = [headers, ...rows]
+    .map((r) => r.map((c) => `"${c.replace(/"/g, '""')}"`).join(","))
+    .join("\n")
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement("a")
+  a.href = url
+  a.setAttribute("download", fileName)
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
+  URL.revokeObjectURL(url)
+}
+
 function getStatusColor(status?: string): string {
   const colors: Record<string, string> = {
     pending: "bg-yellow-100 text-yellow-800 border-yellow-300",
@@ -35,6 +54,12 @@ function getStatusColor(status?: string): string {
 }
 
 export function OrderTable({ title, description, orders }: OrderTableProps) {
+  // pagination state
+  const [currentPage, setCurrentPage] = useState(1)
+  const pageSize = 5
+  const totalPages = Math.ceil(orders.length / pageSize)
+  const pagedOrders = orders.slice((currentPage - 1) * pageSize, currentPage * pageSize)
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -43,7 +68,13 @@ export function OrderTable({ title, description, orders }: OrderTableProps) {
           <p className="text-sm text-gray-600 dark:text-gray-400">{description}</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <Button variant="outline" size="sm">Export</Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => exportOrdersCSV(orders, `${title.replace(/\s+/g, "-").toLowerCase()}.csv`)}
+          >
+            Export
+          </Button>
           <Button size="sm">Add Order</Button>
         </div>
       </div>
@@ -114,7 +145,7 @@ export function OrderTable({ title, description, orders }: OrderTableProps) {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {orders.map((order) => (
+                {pagedOrders.map((order) => (
                   <TableRow key={order.id}>
                     <TableCell className="font-medium">
                       <div className="flex items-center gap-2">
@@ -145,6 +176,29 @@ export function OrderTable({ title, description, orders }: OrderTableProps) {
           </div>
         </CardContent>
       </Card>
+
+      {/* pagination controls */}
+      {totalPages > 1 && (
+        <div className="flex justify-between items-center mt-4">
+          <Button
+            size="sm"
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+          >
+            Previous
+          </Button>
+          <span className="text-sm text-gray-600">
+            Page {currentPage} of {totalPages}
+          </span>
+          <Button
+            size="sm"
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+          >
+            Next
+          </Button>
+        </div>
+      )}
     </div>
   )
 }

@@ -1,0 +1,56 @@
+[
+    {
+        "id": "CUS-1001",
+        "name": "Jane Cooper",
+        "email": "jane.cooper@example.com",
+        "phone": "+1 (555) 123-4567",
+        "address": "123 Main Street, New York, NY 10001",
+        "avatar": "JC",
+        "segment": "vip"
+    },
+    {
+        "id": "CUS-1002",
+        "name": "Cody Fisher",
+        "email": "cody.fisher@example.com",
+        "phone": "+1 (555) 234-5678",
+        "address": "456 Oak Avenue, Los Angeles, CA 90001",
+        "avatar": "CF",
+        "segment": "new"
+    },
+    {
+        "id": "CUS-1003",
+        "name": "Kristin Watson",
+        "email": "kristin.watson@example.com",
+        "phone": "+1 (555) 345-6789",
+        "address": "789 Pine Road, Chicago, IL 60601",
+        "avatar": "KW",
+        "segment": "inactive"
+    },
+    {
+        "id": "CUS-1004",
+        "name": "Floyd Lewis",
+        "email": "floyd.lewis@example.com",
+        "phone": "+1 (555) 111-2222",
+        "address": "321 Oak Street, Dallas, TX 75201",
+        "avatar": "FL",
+        "segment": "vip"
+    },
+    {
+        "id": "CUS-1005",
+        "name": "Michael Brown",
+        "email": "michael.brown@example.com",
+        "phone": "+1 (555) 789-0123",
+        "address": "147 Elm Avenue, Boston, MA 02101",
+        "avatar": "MB",
+        "segment": "new"
+    },
+    {
+        "id": "CUS-1006",
+        "name": "Emily Davis",
+        "email": "emily.davis@example.com",
+        "phone": "+1 (555) 890-1234",
+        "address": "258 Walnut Way, Miami, FL 33101",
+        "avatar": "ED",
+        "segment": "inactive"
+    }
+]
