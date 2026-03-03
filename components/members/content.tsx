@@ -1,3 +1,6 @@
+"use client"
+
+import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -5,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Users, Search, Plus, Shield, Eye, Edit, Mail, MoreHorizontal } from "lucide-react"
+import { Pagination } from "@/components/shared/pagination"
 
 const members = [
   { id: 1, name: "John Smith", email: "john@cmsfullform.com", role: "Administrator", status: "active", lastActive: "2 mins ago", avatar: "JS" },
@@ -22,6 +26,12 @@ const roles = [
 ]
 
 export function MembersContent() {
+  const [currentPage, setCurrentPage] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
+
+  const totalPages = Math.ceil(members.length / pageSize)
+  const paginatedMembers = members.slice((currentPage - 1) * pageSize, currentPage * pageSize)
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -114,7 +124,7 @@ export function MembersContent() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {members.map((member) => (
+                {paginatedMembers.map((member) => (
                   <TableRow key={member.id}>
                     <TableCell>
                       <div className="flex items-center gap-3">
@@ -166,6 +176,20 @@ export function MembersContent() {
               </TableBody>
             </Table>
           </div>
+
+          {totalPages > 1 && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              pageSize={pageSize}
+              totalItems={members.length}
+              onPageChange={setCurrentPage}
+              onPageSizeChange={(newSize) => {
+                setPageSize(newSize)
+                setCurrentPage(1)
+              }}
+            />
+          )}
         </CardContent>
       </Card>
 

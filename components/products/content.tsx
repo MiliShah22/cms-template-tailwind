@@ -13,6 +13,7 @@ import Link from "next/link"
 
 import { getCategorySlugs, getDisplayName, Product } from "@/lib/products"
 import { useAppSelector } from "@/lib/store/hooks"
+import { Pagination } from "@/components/shared/pagination"
 
 // pull from redux store instead of static JSON
 // selector will return the currentable array
@@ -219,6 +220,23 @@ export function ProductsTable({ filterCategory, onEdit }: ProductsTableProps) {
     ? products.filter((p) => p.category === filterCategory)
     : products
 
+  const [currentPage, setCurrentPage] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
+
+  const totalPages = Math.ceil(rows.length / pageSize)
+  const startIdx = (currentPage - 1) * pageSize
+  const endIdx = startIdx + pageSize
+  const paginatedRows = rows.slice(startIdx, endIdx)
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(Math.max(1, Math.min(page, totalPages)))
+  }
+
+  const handlePageSizeChange = (size: number) => {
+    setPageSize(size)
+    setCurrentPage(1)
+  }
+
   return (
     <div className="w-full overflow-x-auto">
       <Table>
@@ -234,7 +252,7 @@ export function ProductsTable({ filterCategory, onEdit }: ProductsTableProps) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {rows.map((product) => (
+          {paginatedRows.map((product) => (
             <TableRow key={product.id}>
               <TableCell className="font-medium">
                 <div className="flex items-center gap-2">
@@ -288,6 +306,14 @@ export function ProductsTable({ filterCategory, onEdit }: ProductsTableProps) {
           ))}
         </TableBody>
       </Table>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        pageSize={pageSize}
+        totalItems={rows.length}
+        onPageChange={handlePageChange}
+        onPageSizeChange={handlePageSizeChange}
+      />
     </div>
   )
 }

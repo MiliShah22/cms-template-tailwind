@@ -8,6 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Input } from "@/components/ui/input"
 import { Eye } from "lucide-react"
 import Link from "next/link"
+import { Pagination } from "@/components/shared/pagination"
 
 export interface CustomerData {
     id: string
@@ -43,7 +44,7 @@ export function exportCustomersCSV(customers: CustomerData[], fileName = "custom
 
 export function CustomerTable({ title, description, customers }: CustomerTableProps) {
     const [currentPage, setCurrentPage] = useState(1)
-    const pageSize = 5
+    const [pageSize, setPageSize] = useState(10)
     const totalPages = Math.ceil(customers.length / pageSize)
     const paged = customers.slice((currentPage - 1) * pageSize, currentPage * pageSize)
 
@@ -101,25 +102,17 @@ export function CustomerTable({ title, description, customers }: CustomerTablePr
             </Card>
 
             {totalPages > 1 && (
-                <div className="flex justify-between items-center mt-4">
-                    <Button
-                        size="sm"
-                        disabled={currentPage === 1}
-                        onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                    >
-                        Previous
-                    </Button>
-                    <span className="text-sm text-gray-600">
-                        Page {currentPage} of {totalPages}
-                    </span>
-                    <Button
-                        size="sm"
-                        disabled={currentPage === totalPages}
-                        onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                    >
-                        Next
-                    </Button>
-                </div>
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    pageSize={pageSize}
+                    totalItems={customers.length}
+                    onPageChange={setCurrentPage}
+                    onPageSizeChange={(newSize) => {
+                        setPageSize(newSize)
+                        setCurrentPage(1)
+                    }}
+                />
             )}
         </div>
     )

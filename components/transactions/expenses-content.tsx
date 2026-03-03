@@ -6,14 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { DollarSign, TrendingDown, CreditCard, Download, Filter } from "lucide-react"
-import {
-    Pagination,
-    PaginationContent,
-    PaginationItem,
-    PaginationLink,
-    PaginationPrevious,
-    PaginationNext,
-} from "@/components/ui/pagination"
+import { Pagination } from "@/components/shared/pagination"
 
 import type { ExpenseTransaction } from "@/lib/transactions"
 
@@ -21,7 +14,7 @@ interface TransactionsExpensesContentProps {
     transactions: ExpenseTransaction[]
 }
 
-const PAGE_SIZE = 5
+const PAGE_SIZE = 10
 
 export function TransactionsExpensesContent({ transactions }: TransactionsExpensesContentProps) {
     // convert amounts into formatted strings for display
@@ -42,34 +35,27 @@ export function TransactionsExpensesContent({ transactions }: TransactionsExpens
         .reduce((acc, e) => acc + Math.abs(e.amount), 0)
 
     const [page, setPage] = useState(1)
-    const totalPages = Math.ceil(expensesData.length / PAGE_SIZE)
+    const [pageSize, setPageSize] = useState(PAGE_SIZE)
+    const totalPages = Math.ceil(expensesData.length / pageSize)
     const currentPageData = useMemo(
-        () => expensesData.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE),
-        [expensesData, page],
+        () => expensesData.slice((page - 1) * pageSize, page * pageSize),
+        [expensesData, page, pageSize],
     )
 
     const renderPagination = () => {
         if (totalPages <= 1) return null
         return (
-            <Pagination className="mt-4">
-                <PaginationPrevious onClick={() => setPage(Math.max(page - 1, 1))} />
-                <PaginationContent>
-                    {Array.from({ length: totalPages }).map((_, i) => {
-                        const num = i + 1
-                        return (
-                            <PaginationItem key={num}>
-                                <PaginationLink
-                                    isActive={num === page}
-                                    onClick={() => setPage(num)}
-                                >
-                                    {num}
-                                </PaginationLink>
-                            </PaginationItem>
-                        )
-                    })}
-                </PaginationContent>
-                <PaginationNext onClick={() => setPage(Math.min(page + 1, totalPages))} />
-            </Pagination>
+            <Pagination
+                currentPage={page}
+                totalPages={totalPages}
+                pageSize={pageSize}
+                totalItems={expensesData.length}
+                onPageChange={setPage}
+                onPageSizeChange={(newSize) => {
+                    setPageSize(newSize)
+                    setPage(1)
+                }}
+            />
         )
     }
 

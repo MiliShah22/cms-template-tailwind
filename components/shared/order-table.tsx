@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input"
 import { Eye } from "lucide-react"
 import Link from "next/link"
+import { Pagination } from "@/components/shared/pagination"
 
 export interface OrderData {
   id: string
@@ -56,7 +57,7 @@ function getStatusColor(status?: string): string {
 export function OrderTable({ title, description, orders }: OrderTableProps) {
   // pagination state
   const [currentPage, setCurrentPage] = useState(1)
-  const pageSize = 5
+  const [pageSize, setPageSize] = useState(10)
   const totalPages = Math.ceil(orders.length / pageSize)
   const pagedOrders = orders.slice((currentPage - 1) * pageSize, currentPage * pageSize)
 
@@ -179,25 +180,17 @@ export function OrderTable({ title, description, orders }: OrderTableProps) {
 
       {/* pagination controls */}
       {totalPages > 1 && (
-        <div className="flex justify-between items-center mt-4">
-          <Button
-            size="sm"
-            disabled={currentPage === 1}
-            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-          >
-            Previous
-          </Button>
-          <span className="text-sm text-gray-600">
-            Page {currentPage} of {totalPages}
-          </span>
-          <Button
-            size="sm"
-            disabled={currentPage === totalPages}
-            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-          >
-            Next
-          </Button>
-        </div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          pageSize={pageSize}
+          totalItems={orders.length}
+          onPageChange={setCurrentPage}
+          onPageSizeChange={(newSize) => {
+            setPageSize(newSize)
+            setCurrentPage(1)
+          }}
+        />
       )}
     </div>
   )

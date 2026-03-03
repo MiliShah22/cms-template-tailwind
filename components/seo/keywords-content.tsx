@@ -1,8 +1,12 @@
+"use client"
+
+import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Search, TrendingUp, TrendingDown, Plus } from "lucide-react"
+import { Pagination } from "@/components/shared/pagination"
 
 const keywordsData = [
     { id: 1, keyword: "CMS software", position: 3, change: 2, volume: 12100, difficulty: "medium", pages: 5 },
@@ -16,9 +20,15 @@ const keywordsData = [
 ]
 
 export function SeoKeywordsContent() {
+    const [currentPage, setCurrentPage] = useState(1)
+    const [pageSize, setPageSize] = useState(10)
+
     const top3 = keywordsData.filter(k => k.position <= 3).length
     const top10 = keywordsData.filter(k => k.position <= 10).length
     const avgPosition = keywordsData.reduce((acc, k) => acc + k.position, 0) / keywordsData.length
+
+    const totalPages = Math.ceil(keywordsData.length / pageSize)
+    const paginatedData = keywordsData.slice((currentPage - 1) * pageSize, currentPage * pageSize)
 
     return (
         <div className="space-y-6">
@@ -103,7 +113,7 @@ export function SeoKeywordsContent() {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {keywordsData.map((keyword) => (
+                                {paginatedData.map((keyword) => (
                                     <TableRow key={keyword.id}>
                                         <TableCell className="font-medium">{keyword.keyword}</TableCell>
                                         <TableCell>
@@ -142,6 +152,19 @@ export function SeoKeywordsContent() {
                     </div>
                 </CardContent>
             </Card>
-        </div>
+
+            {totalPages > 1 && (
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    pageSize={pageSize}
+                    totalItems={keywordsData.length}
+                    onPageChange={setCurrentPage}
+                    onPageSizeChange={(newSize) => {
+                        setPageSize(newSize)
+                        setCurrentPage(1)
+                    }}
+                />
+            )}        </div>
     )
 }
