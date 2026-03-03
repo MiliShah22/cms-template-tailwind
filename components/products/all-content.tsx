@@ -8,11 +8,13 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Package, Tag, Eye } from "lucide-react"
 import Link from "next/link"
 
-import { getProducts, Product } from "@/lib/products"
+import { Product } from "@/lib/products"
+import { useAppSelector } from "@/lib/store/hooks"
 
-const products: Product[] = getProducts()
+const selectProducts = (state: any) => state.products.items
 
 export function AllProductsContent() {
+    const products: Product[] = useAppSelector(selectProducts)
     const [currentPage, setCurrentPage] = useState(1)
     const pageSize = 5
     const totalPages = Math.ceil(products.length / pageSize)

@@ -1,0 +1,74 @@
+[
+    {
+        "id": "TXN-78234",
+        "date": "2024-02-15",
+        "description": "CMS Pro Plan - Annual",
+        "amount": 588.00,
+        "status": "completed",
+        "method": "Credit Card",
+        "customer": "Acme Corp"
+    },
+    {
+        "id": "TXN-78233",
+        "date": "2024-02-15",
+        "description": "SEO Toolkit Addon",
+        "amount": 108.00,
+        "status": "completed",
+        "method": "PayPal",
+        "customer": "TechStart Inc"
+    },
+    {
+        "id": "TXN-78232",
+        "date": "2024-02-14",
+        "description": "CMS Starter Plan - Monthly",
+        "amount": 19.00,
+        "status": "completed",
+        "method": "Credit Card",
+        "customer": "John Doe"
+    },
+    {
+        "id": "TXN-78231",
+        "date": "2024-02-14",
+        "description": "Analytics Upgrade - Monthly",
+        "amount": 15.00,
+        "status": "pending",
+        "method": "Bank Transfer",
+        "customer": "WebFlow Ltd"
+    },
+    {
+        "id": "TXN-78230",
+        "date": "2024-02-13",
+        "description": "CMS Enterprise - Monthly",
+        "amount": 299.00,
+        "status": "completed",
+        "method": "Credit Card",
+        "customer": "Global Solutions"
+    },
+    {
+        "id": "TXN-78229",
+        "date": "2024-02-13",
+        "description": "Refund - CMS Starter Plan",
+        "amount": -19.00,
+        "status": "refunded",
+        "method": "Credit Card",
+        "customer": "Jane Smith"
+    },
+    {
+        "id": "TXN-78228",
+        "date": "2024-02-12",
+        "description": "Custom Development",
+        "amount": 1500.00,
+        "status": "completed",
+        "method": "Invoice",
+        "customer": "TechVentures"
+    },
+    {
+        "id": "TXN-78227",
+        "date": "2024-02-12",
+        "description": "CMS Pro Plan - Monthly",
+        "amount": 49.00,
+        "status": "completed",
+        "method": "PayPal",
+        "customer": "StartUp Hub"
+    }
+]

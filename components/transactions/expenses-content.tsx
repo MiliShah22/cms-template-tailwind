@@ -1,21 +1,77 @@
+"use client"
+
+import { useState, useMemo } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { DollarSign, TrendingDown, CreditCard, Download, Filter } from "lucide-react"
+import {
+    Pagination,
+    PaginationContent,
+    PaginationItem,
+    PaginationLink,
+    PaginationPrevious,
+    PaginationNext,
+} from "@/components/ui/pagination"
 
-const expensesData = [
-    { id: 1, description: "Server Hosting - AWS", amount: "$299.00", date: "2024-02-15", category: "Infrastructure", status: "paid" },
-    { id: 2, description: "Domain Renewal", amount: "$15.00", date: "2024-02-14", category: "Domain", status: "paid" },
-    { id: 3, description: "Email Service - SendGrid", amount: "$49.00", date: "2024-02-13", category: "Services", status: "paid" },
-    { id: 4, description: "CDN Service - Cloudflare", amount: "$25.00", date: "2024-02-12", category: "Infrastructure", status: "paid" },
-    { id: 5, description: "SSL Certificate", amount: "$75.00", date: "2024-02-10", category: "Security", status: "pending" },
-    { id: 6, description: "Analytics - Mixpanel", amount: "$120.00", date: "2024-02-08", category: "Services", status: "paid" },
-]
+import type { ExpenseTransaction } from "@/lib/transactions"
 
-export function TransactionsExpensesContent() {
-    const totalExpenses = expensesData.filter(e => e.status === "paid").reduce((acc, e) => acc + parseFloat(e.amount.replace("$", "")), 0)
-    const pendingExpenses = expensesData.filter(e => e.status === "pending").reduce((acc, e) => acc + parseFloat(e.amount.replace("$", "")), 0)
+interface TransactionsExpensesContentProps {
+    transactions: ExpenseTransaction[]
+}
+
+const PAGE_SIZE = 5
+
+export function TransactionsExpensesContent({ transactions }: TransactionsExpensesContentProps) {
+    // convert amounts into formatted strings for display
+    const expensesData = useMemo(
+        () =>
+            transactions.map((t) => ({
+                ...t,
+                amount: `$${Math.abs(t.amount).toFixed(2)}`,
+            })),
+        [transactions],
+    )
+
+    const totalExpenses = transactions
+        .filter((e) => e.status === "paid")
+        .reduce((acc, e) => acc + Math.abs(e.amount), 0)
+    const pendingExpenses = transactions
+        .filter((e) => e.status === "pending")
+        .reduce((acc, e) => acc + Math.abs(e.amount), 0)
+
+    const [page, setPage] = useState(1)
+    const totalPages = Math.ceil(expensesData.length / PAGE_SIZE)
+    const currentPageData = useMemo(
+        () => expensesData.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE),
+        [expensesData, page],
+    )
+
+    const renderPagination = () => {
+        if (totalPages <= 1) return null
+        return (
+            <Pagination className="mt-4">
+                <PaginationPrevious onClick={() => setPage(Math.max(page - 1, 1))} />
+                <PaginationContent>
+                    {Array.from({ length: totalPages }).map((_, i) => {
+                        const num = i + 1
+                        return (
+                            <PaginationItem key={num}>
+                                <PaginationLink
+                                    isActive={num === page}
+                                    onClick={() => setPage(num)}
+                                >
+                                    {num}
+                                </PaginationLink>
+                            </PaginationItem>
+                        )
+                    })}
+                </PaginationContent>
+                <PaginationNext onClick={() => setPage(Math.min(page + 1, totalPages))} />
+            </Pagination>
+        )
+    }
 
     return (
         <div className="space-y-6">
@@ -81,7 +137,7 @@ export function TransactionsExpensesContent() {
                         <DollarSign className="h-4 w-4 text-gray-400" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-semibold">{expensesData.length}</div>
+                        <div className="text-2xl font-semibold">{transactions.length}</div>
                         <p className="mt-1 text-xs text-gray-500">This period</p>
                     </CardContent>
                 </Card>
@@ -105,7 +161,7 @@ export function TransactionsExpensesContent() {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {expensesData.map((item) => (
+                                {currentPageData.map((item) => (
                                     <TableRow key={item.id}>
                                         <TableCell className="font-medium">{item.description}</TableCell>
                                         <TableCell>
@@ -121,6 +177,7 @@ export function TransactionsExpensesContent() {
                                     </TableRow>
                                 ))}
                             </TableBody>
+                            {renderPagination()}
                         </Table>
                     </div>
                 </CardContent>

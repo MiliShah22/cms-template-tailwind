@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -75,7 +76,9 @@ const payments: Payment[] = [
   },
 ]
 
-export function PaymentHistoryContent() {
+export function PaymentHistoryContent({ initialTab = 'all' }: { initialTab?: 'all' | 'charges' | 'refunds' } = {}) {
+  const [activeTab, setActiveTab] = useState(initialTab)
+
   const succeededTotal = payments
     .filter((p) => p.status === "succeeded" && p.type === "charge")
     .reduce((sum, p) => sum + parseFloat(p.amount.replace(/[^0-9.-]+/g, "")), 0)

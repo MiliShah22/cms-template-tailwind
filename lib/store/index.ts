@@ -3,18 +3,20 @@ import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, 
 import storage from 'redux-persist/lib/storage'
 import settingsReducer from './settingsSlice'
 import organizationReducer from './organizationSlice'
+import productsReducer from './productsSlice'
 
 // Persist configuration
 const persistConfig = {
     key: 'root',
     storage,
-    whitelist: ['settings', 'organization'],
+    whitelist: ['settings', 'organization', 'products'],
 }
 
 // Combine reducers
 const rootReducer = combineReducers({
     settings: settingsReducer,
     organization: organizationReducer,
+    products: productsReducer,
 })
 
 // Create persisted reducer

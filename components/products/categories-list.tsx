@@ -19,7 +19,7 @@ export default function CategoriesList() {
                             href={`/products/categories/${slug}`}
                             className="text-indigo-600 hover:underline capitalize"
                         >
-                            {displayName(slug)}
+                            {getDisplayName(slug)}
                         </Link>
                     </li>
                 ))}

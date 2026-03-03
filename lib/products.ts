@@ -5,10 +5,22 @@ export interface Product {
     name: string
     sku: string
     category: string
-    price: string
+    price: string | number
     stock: number
     status: string
     trend: string
+    tags?: string[]
+    description?: string
+    comparePrice?: number
+    sales?: number
+    revenue?: number
+    rating?: number
+    reviews?: number
+    createdAt?: string
+    updatedAt?: string
+    variants?: any[]
+    salesHistory?: any[]
+    activities?: any[]
 }
 
 // raw comes in as any[] when importing JSON

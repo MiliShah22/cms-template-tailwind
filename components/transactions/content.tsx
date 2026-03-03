@@ -1,99 +1,94 @@
+"use client"
+
+import { useState, useMemo } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Wallet, Search, Download, Filter, TrendingUp, TrendingDown, ArrowUpRight, ArrowDownRight } from "lucide-react"
+import { Wallet, Search, Download, Filter, TrendingUp, TrendingDown } from "lucide-react"
+import {
+    Pagination,
+    PaginationContent,
+    PaginationItem,
+    PaginationLink,
+    PaginationPrevious,
+    PaginationNext,
+} from "@/components/ui/pagination"
 
-const transactions = [
-    {
-        id: "TXN-78234",
-        date: "2024-02-15",
-        description: "CMS Pro Plan - Annual",
-        amount: 588.00,
-        status: "completed",
-        method: "Credit Card",
-        customer: "Acme Corp",
-    },
-    {
-        id: "TXN-78233",
-        date: "2024-02-15",
-        description: "SEO Toolkit Addon",
-        amount: 108.00,
-        status: "completed",
-        method: "PayPal",
-        customer: "TechStart Inc",
-    },
-    {
-        id: "TXN-78232",
-        date: "2024-02-14",
-        description: "CMS Starter Plan - Monthly",
-        amount: 19.00,
-        status: "completed",
-        method: "Credit Card",
-        customer: "John Doe",
-    },
-    {
-        id: "TXN-78231",
-        date: "2024-02-14",
-        description: "Analytics Upgrade - Monthly",
-        amount: 15.00,
-        status: "pending",
-        method: "Bank Transfer",
-        customer: "WebFlow Ltd",
-    },
-    {
-        id: "TXN-78230",
-        date: "2024-02-13",
-        description: "CMS Enterprise - Monthly",
-        amount: 299.00,
-        status: "completed",
-        method: "Credit Card",
-        customer: "Global Solutions",
-    },
-    {
-        id: "TXN-78229",
-        date: "2024-02-13",
-        description: "Refund - CMS Starter Plan",
-        amount: -19.00,
-        status: "refunded",
-        method: "Credit Card",
-        customer: "Jane Smith",
-    },
-    {
-        id: "TXN-78228",
-        date: "2024-02-12",
-        description: "Custom Development",
-        amount: 1500.00,
-        status: "completed",
-        method: "Invoice",
-        customer: "TechVentures",
-    },
-    {
-        id: "TXN-78227",
-        date: "2024-02-12",
-        description: "CMS Pro Plan - Monthly",
-        amount: 49.00,
-        status: "completed",
-        method: "PayPal",
-        customer: "StartUp Hub",
-    },
-]
+import type { Transaction, ExpenseTransaction } from "@/lib/transactions"
 
-const incomeTransactions = transactions.filter((t) => t.amount > 0 && t.status !== "refunded")
-const expenseTransactions = [
-    { id: "EXP-001", date: "2024-02-15", description: "Server Hosting - AWS", amount: -450.00, category: "Infrastructure" },
-    { id: "EXP-002", date: "2024-02-14", description: "Software Licenses", amount: -299.00, category: "Software" },
-    { id: "EXP-003", date: "2024-02-13", description: "Marketing Campaign", amount: -1200.00, category: "Marketing" },
-    { id: "EXP-004", date: "2024-02-12", description: "Employee Salary", amount: -8500.00, category: "Payroll" },
-    { id: "EXP-005", date: "2024-02-11", description: "Office Supplies", amount: -125.50, category: "Operations" },
-]
+interface TransactionsContentProps {
+    transactions: Transaction[]
+    expenseTransactions?: ExpenseTransaction[]
+}
 
-export function TransactionsContent() {
+const PAGE_SIZE = 5
+
+export function TransactionsContent({ transactions, expenseTransactions = [] }: TransactionsContentProps) {
+    // derived helper lists
+    const incomeTransactions = useMemo(
+        () => transactions.filter((t) => t.amount > 0 && t.status !== "refunded"),
+        [transactions],
+    )
+
+    // current tab and page state
+    const [activeTab, setActiveTab] = useState<'all' | 'income' | 'expenses'>('all')
+    const [pageAll, setPageAll] = useState(1)
+    const [pageIncome, setPageIncome] = useState(1)
+    const [pageExpenses, setPageExpenses] = useState(1)
+
     const totalIncome = transactions.filter((t) => t.status !== "refunded").reduce((acc, t) => acc + t.amount, 0)
     const totalExpenses = expenseTransactions.reduce((acc, t) => acc + Math.abs(t.amount), 0)
     const netProfit = totalIncome - totalExpenses
+
+    // pagination calculations
+    const allTotalPages = Math.ceil(transactions.length / PAGE_SIZE)
+    const incomeTotalPages = Math.ceil(incomeTransactions.length / PAGE_SIZE)
+    const expensesTotalPages = Math.ceil(expenseTransactions.length / PAGE_SIZE)
+
+    const currentAll = useMemo(
+        () => transactions.slice((pageAll - 1) * PAGE_SIZE, pageAll * PAGE_SIZE),
+        [transactions, pageAll],
+    )
+    const currentIncome = useMemo(
+        () => incomeTransactions.slice((pageIncome - 1) * PAGE_SIZE, pageIncome * PAGE_SIZE),
+        [incomeTransactions, pageIncome],
+    )
+    const currentExpenses = useMemo(
+        () => expenseTransactions.slice((pageExpenses - 1) * PAGE_SIZE, pageExpenses * PAGE_SIZE),
+        [expenseTransactions, pageExpenses],
+    )
+
+    const renderPagination = (
+        page: number,
+        totalPages: number,
+        setPage: (n: number) => void,
+    ) => {
+        if (totalPages <= 1) return null
+        return (
+            <Pagination className="mt-4">
+                <PaginationPrevious onClick={() => setPage(Math.max(page - 1, 1))} />
+                <PaginationContent>
+                    {Array.from({ length: totalPages }).map((_, i) => {
+                        const num = i + 1
+                        return (
+                            <PaginationItem key={num}>
+                                <PaginationLink
+                                    isActive={num === page}
+                                    onClick={() => setPage(num)}
+                                >
+                                    {num}
+                                </PaginationLink>
+                            </PaginationItem>
+                        )
+                    })}
+                </PaginationContent>
+                <PaginationNext onClick={() => setPage(Math.min(page + 1, totalPages))} />
+            </Pagination>
+        )
+    }
 
     return (
         <div className="space-y-6">
@@ -190,7 +185,7 @@ export function TransactionsContent() {
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
-                                        {transactions.map((txn) => (
+                                        {currentAll.map((txn) => (
                                             <TableRow key={txn.id}>
                                                 <TableCell className="font-medium text-xs">{txn.id}</TableCell>
                                                 <TableCell className="text-sm">{txn.date}</TableCell>
@@ -219,6 +214,7 @@ export function TransactionsContent() {
                                     </TableBody>
                                 </Table>
                             </div>
+                            {renderPagination(pageAll, allTotalPages, setPageAll)}
                         </TabsContent>
 
                         <TabsContent value="income" className="pt-4">
@@ -234,7 +230,7 @@ export function TransactionsContent() {
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
-                                        {incomeTransactions.map((txn) => (
+                                        {currentIncome.map((txn) => (
                                             <TableRow key={txn.id}>
                                                 <TableCell className="font-medium text-xs">{txn.id}</TableCell>
                                                 <TableCell className="text-sm">{txn.date}</TableCell>
@@ -248,6 +244,7 @@ export function TransactionsContent() {
                                     </TableBody>
                                 </Table>
                             </div>
+                            {renderPagination(pageIncome, incomeTotalPages, setPageIncome)}
                         </TabsContent>
 
                         <TabsContent value="expenses" className="pt-4">
@@ -263,7 +260,7 @@ export function TransactionsContent() {
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
-                                        {expenseTransactions.map((txn) => (
+                                        {currentExpenses.map((txn) => (
                                             <TableRow key={txn.id}>
                                                 <TableCell className="font-medium text-xs">{txn.id}</TableCell>
                                                 <TableCell className="text-sm">{txn.date}</TableCell>
@@ -277,6 +274,7 @@ export function TransactionsContent() {
                                     </TableBody>
                                 </Table>
                             </div>
+                            {renderPagination(pageExpenses, expensesTotalPages, setPageExpenses)}
                         </TabsContent>
                     </Tabs>
                 </CardContent>

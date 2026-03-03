@@ -1,17 +1,27 @@
+"use client"
+
+import { useState, useMemo } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { DollarSign, TrendingUp, Calendar, Download, Filter, Plus } from "lucide-react"
+import {
+    Pagination,
+    PaginationContent,
+    PaginationItem,
+    PaginationLink,
+    PaginationPrevious,
+    PaginationNext,
+} from "@/components/ui/pagination"
 
-const incomeData = [
-    { id: 1, source: "Subscription - Pro Plan", amount: "$49.00", date: "2024-02-15", status: "completed", invoice: "INV-2024-0156" },
-    { id: 2, source: "Subscription - Starter Plan", amount: "$19.00", date: "2024-02-15", status: "completed", invoice: "INV-2024-0155" },
-    { id: 3, source: "Add-on - SEO Toolkit", amount: "$9.00", date: "2024-02-14", status: "completed", invoice: "INV-2024-0154" },
-    { id: 4, source: "Subscription - Pro Plan", amount: "$49.00", date: "2024-02-14", status: "completed", invoice: "INV-2024-0153" },
-    { id: 5, source: "Subscription - Enterprise", amount: "$199.00", date: "2024-02-13", status: "pending", invoice: "INV-2024-0152" },
-    { id: 6, source: "Add-on - Analytics Upgrade", amount: "$15.00", date: "2024-02-12", status: "completed", invoice: "INV-2024-0151" },
-]
+import type { Transaction } from "@/lib/transactions"
+
+interface TransactionsIncomeContentProps {
+    transactions: Transaction[]
+}
+
+const PAGE_SIZE = 5
 
 const monthlyIncome = [
     { month: "Feb", amount: 12450 },
@@ -22,9 +32,59 @@ const monthlyIncome = [
     { month: "Sep", amount: 8900 },
 ]
 
-export function TransactionsIncomeContent() {
-    const totalIncome = incomeData.filter(i => i.status === "completed").reduce((acc, i) => acc + parseFloat(i.amount.replace("$", "")), 0)
-    const pendingIncome = incomeData.filter(i => i.status === "pending").reduce((acc, i) => acc + parseFloat(i.amount.replace("$", "")), 0)
+export function TransactionsIncomeContent({ transactions }: TransactionsIncomeContentProps) {
+    // convert numeric amounts and keep rest of code unchanged
+    const incomeData = useMemo(
+        () =>
+            transactions.map((t) => ({
+                ...t,
+                amount: `$${t.amount.toFixed(2)}`,
+                id: t.id,
+                date: t.date,
+                status: t.status,
+                invoice: t.id.replace("TXN", "INV"), // just generate an invoice id from txn for demo
+            })),
+        [transactions],
+    )
+
+    const totalIncome = transactions
+        .filter((t) => t.status === "completed")
+        .reduce((acc, t) => acc + t.amount, 0)
+    const pendingIncome = transactions
+        .filter((t) => t.status === "pending")
+        .reduce((acc, t) => acc + t.amount, 0)
+
+    const [page, setPage] = useState(1)
+    const totalPages = Math.ceil(incomeData.length / PAGE_SIZE)
+    const currentPageData = useMemo(
+        () => incomeData.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE),
+        [incomeData, page],
+    )
+
+    const renderPagination = () => {
+        if (totalPages <= 1) return null
+        return (
+            <Pagination className="mt-4">
+                <PaginationPrevious onClick={() => setPage(Math.max(page - 1, 1))} />
+                <PaginationContent>
+                    {Array.from({ length: totalPages }).map((_, i) => {
+                        const num = i + 1
+                        return (
+                            <PaginationItem key={num}>
+                                <PaginationLink
+                                    isActive={num === page}
+                                    onClick={() => setPage(num)}
+                                >
+                                    {num}
+                                </PaginationLink>
+                            </PaginationItem>
+                        )
+                    })}
+                </PaginationContent>
+                <PaginationNext onClick={() => setPage(Math.min(page + 1, totalPages))} />
+            </Pagination>
+        )
+    }
 
     return (
         <div className="space-y-6">
@@ -90,7 +150,7 @@ export function TransactionsIncomeContent() {
                         <DollarSign className="h-4 w-4 text-gray-400" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-semibold">{incomeData.length}</div>
+                        <div className="text-2xl font-semibold">{transactions.length}</div>
                         <p className="mt-1 text-xs text-gray-500">This period</p>
                     </CardContent>
                 </Card>
@@ -106,7 +166,7 @@ export function TransactionsIncomeContent() {
                         <Table>
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead>Source</TableHead>
+                                    <TableHead>Description</TableHead>
                                     <TableHead>Amount</TableHead>
                                     <TableHead>Date</TableHead>
                                     <TableHead>Invoice</TableHead>
@@ -114,9 +174,9 @@ export function TransactionsIncomeContent() {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {incomeData.map((item) => (
+                                {currentPageData.map((item) => (
                                     <TableRow key={item.id}>
-                                        <TableCell className="font-medium">{item.source}</TableCell>
+                                        <TableCell className="font-medium">{item.description}</TableCell>
                                         <TableCell className="font-semibold text-green-600">{item.amount}</TableCell>
                                         <TableCell className="text-sm text-gray-600">{item.date}</TableCell>
                                         <TableCell className="text-sm text-gray-600">{item.invoice}</TableCell>
@@ -128,6 +188,7 @@ export function TransactionsIncomeContent() {
                                     </TableRow>
                                 ))}
                             </TableBody>
+                            {renderPagination()}
                         </Table>
                     </div>
                 </CardContent>

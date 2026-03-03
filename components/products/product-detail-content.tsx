@@ -34,6 +34,9 @@ import {
     RefreshCw,
 } from "lucide-react"
 import Link from "next/link"
+import { Product } from "@/lib/products"
+import { useAppSelector } from "@/lib/store/hooks"
+import { ProductForm } from "./product-form"
 
 // Sample product data - matches the products in all-content.tsx
 const productsData: Record<string, any> = {
@@ -214,7 +217,12 @@ interface ProductDetailContentProps {
 }
 
 export function ProductDetailContent({ productId }: ProductDetailContentProps) {
-    const product = productsData[productId] || generateProductData(productId)
+    const generated = productsData[productId] || generateProductData(productId)
+
+    const storeProduct: Product | undefined = useAppSelector((s: any) => s.products?.items?.find((p: Product) => p.id === productId))
+
+    const product: any = storeProduct || generated
+    const [showForm, setShowForm] = useState(false)
 
     const stockPercentage = Math.min((product.stock / 500) * 100, 100)
     const stockStatus = product.stock < 50 ? "low" : product.stock < 100 ? "medium" : "good"
@@ -254,17 +262,19 @@ export function ProductDetailContent({ productId }: ProductDetailContentProps) {
                         <p className="mt-2 text-gray-600 dark:text-gray-400 max-w-3xl">{product.description}</p>
 
                         {/* Tags */}
-                        <div className="flex gap-2 mt-3 flex-wrap">
-                            {product.tags.map((tag: string) => (
-                                <Badge key={tag} variant="secondary" className="text-xs capitalize">
-                                    <Tag className="h-3 w-3 mr-1" />
-                                    {tag}
-                                </Badge>
-                            ))}
-                        </div>
+                        {product.tags && product.tags.length > 0 && (
+                            <div className="flex gap-2 mt-3 flex-wrap">
+                                {product.tags.map((tag: string) => (
+                                    <Badge key={tag} variant="secondary" className="text-xs capitalize">
+                                        <Tag className="h-3 w-3 mr-1" />
+                                        {tag}
+                                    </Badge>
+                                ))}
+                            </div>
+                        )}
                     </div>
                     <div className="flex gap-2">
-                        <Button variant="outline" size="sm">
+                        <Button variant="outline" size="sm" onClick={() => setShowForm(true)}>
                             <Edit className="h-4 w-4 mr-2" />
                             Edit
                         </Button>
@@ -275,6 +285,14 @@ export function ProductDetailContent({ productId }: ProductDetailContentProps) {
                 </div>
             </div>
 
+            {showForm && (
+                <Card>
+                    <CardContent>
+                        <ProductForm initial={product as Product} onClose={() => setShowForm(false)} />
+                    </CardContent>
+                </Card>
+            )}
+
             {/* Stats Cards */}
             <div className="grid gap-4 md:grid-cols-4">
                 <Card>
@@ -283,9 +301,9 @@ export function ProductDetailContent({ productId }: ProductDetailContentProps) {
                         <DollarSign className="h-4 w-4 text-gray-400" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-semibold">${product.price.toFixed(2)}</div>
-                        {product.comparePrice > product.price && (
-                            <p className="text-xs text-gray-500 line-through">${product.comparePrice.toFixed(2)}</p>
+                        <div className="text-2xl font-semibold">${Number(product.price).toFixed(2)}</div>
+                        {Number(product.comparePrice) > Number(product.price) && (
+                            <p className="text-xs text-gray-500 line-through">${Number(product.comparePrice).toFixed(2)}</p>
                         )}
                     </CardContent>
                 </Card>
@@ -300,7 +318,7 @@ export function ProductDetailContent({ productId }: ProductDetailContentProps) {
                             <Progress value={stockPercentage} className="h-2" />
                         </div>
                         <p className={`text-xs mt-1 ${stockStatus === 'low' ? 'text-red-500' :
-                                stockStatus === 'medium' ? 'text-yellow-500' : 'text-green-500'
+                            stockStatus === 'medium' ? 'text-yellow-500' : 'text-green-500'
                             }`}>
                             {stockStatus === 'low' ? 'Low stock' :
                                 stockStatus === 'medium' ? 'Medium stock' : 'Good stock level'}
@@ -313,7 +331,7 @@ export function ProductDetailContent({ productId }: ProductDetailContentProps) {
                         <ShoppingCart className="h-4 w-4 text-gray-400" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-semibold">{product.sales.toLocaleString()}</div>
+                        <div className="text-2xl font-semibold">{(product.sales || 0).toLocaleString()}</div>
                         <p className="text-xs text-gray-500 mt-1">Total units sold</p>
                     </CardContent>
                 </Card>
@@ -323,7 +341,7 @@ export function ProductDetailContent({ productId }: ProductDetailContentProps) {
                         <BarChart3 className="h-4 w-4 text-gray-400" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-semibold">${product.revenue.toLocaleString()}</div>
+                        <div className="text-2xl font-semibold">${(product.revenue || 0).toLocaleString()}</div>
                         <p className="text-xs text-gray-500 mt-1">Lifetime revenue</p>
                     </CardContent>
                 </Card>
@@ -361,7 +379,7 @@ export function ProductDetailContent({ productId }: ProductDetailContentProps) {
                     </Card>
 
                     {/* Variants */}
-                    {product.variants.length > 0 && (
+                    {(product.variants || []).length > 0 && (
                         <Card>
                             <CardHeader>
                                 <CardTitle className="text-lg">Product Variants</CardTitle>
@@ -380,7 +398,7 @@ export function ProductDetailContent({ productId }: ProductDetailContentProps) {
                                             {product.variants.map((variant: any) => (
                                                 <TableRow key={variant.id}>
                                                     <TableCell className="font-medium">{variant.name}</TableCell>
-                                                    <TableCell className="text-right">${variant.price.toFixed(2)}</TableCell>
+                                                    <TableCell className="text-right">${Number(variant.price).toFixed(2)}</TableCell>
                                                     <TableCell className="text-right">{variant.stock}</TableCell>
                                                 </TableRow>
                                             ))}
@@ -392,7 +410,7 @@ export function ProductDetailContent({ productId }: ProductDetailContentProps) {
                     )}
 
                     {/* Sales History */}
-                    {product.salesHistory.length > 0 && (
+                    {product?.salesHistory?.length > 0 && (
                         <Card>
                             <CardHeader>
                                 <CardTitle className="text-lg">Sales History</CardTitle>
@@ -423,7 +441,7 @@ export function ProductDetailContent({ productId }: ProductDetailContentProps) {
                     )}
 
                     {/* Activity Timeline */}
-                    {product.activities.length > 0 && (
+                    {product?.activities?.length > 0 && (
                         <Card>
                             <CardHeader>
                                 <CardTitle className="text-lg">Recent Activity</CardTitle>

@@ -201,7 +201,7 @@ export function PendingOrdersContent() {
                     </TableCell>
                     <TableCell className="text-right font-medium">{order.total}</TableCell>
                     <TableCell className="hidden sm:table-cell text-right text-xs text-gray-500">
-                      {calcAge(order.createdAt)}
+                      {order.createdAt ? calcAge(order.createdAt) : '-'}
                     </TableCell>
                   </TableRow>
                 ))}

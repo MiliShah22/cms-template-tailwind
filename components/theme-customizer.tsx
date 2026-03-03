@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
 import { Settings, X, Palette, Layout, Menu, Square, RotateCcw, Save } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
@@ -10,6 +10,7 @@ import { Separator } from "@/components/ui/separator"
 import { Switch } from "@/components/ui/switch"
 import { Slider } from "@/components/ui/slider"
 import { useTheme } from "next-themes"
+import { toast } from "@/hooks/use-toast"
 
 interface ThemeConfig {
   menuState: "full" | "collapsed" | "hidden"
@@ -270,11 +271,16 @@ export function ThemeCustomizer() {
 
     // Apply menu state
     if (typeof window !== "undefined" && (window as any).setMenuStateFromCustomizer) {
-      ;(window as any).setMenuStateFromCustomizer(finalConfig.menuState)
+      ; (window as any).setMenuStateFromCustomizer(finalConfig.menuState)
+    }
+
+    // Keep window variables in sync
+    if (typeof window !== "undefined") {
+      ; (window as any).menuState = finalConfig.menuState
     }
   }, [mounted, theme, applyThemeColors])
 
-  // Apply theme changes when config changes (but not on theme toggle)
+  // Reapply when config changes
   useEffect(() => {
     if (!mounted) return
 
@@ -283,9 +289,14 @@ export function ThemeCustomizer() {
 
     // Apply menu state
     if (typeof window !== "undefined" && (window as any).setMenuStateFromCustomizer) {
-      ;(window as any).setMenuStateFromCustomizer(config.menuState)
+      ; (window as any).setMenuStateFromCustomizer(config.menuState)
     }
-  }, [config, mounted, applyThemeColors])
+
+    // Keep window.menuState in sync for debugging and other scripts
+    if (typeof window !== "undefined") {
+      ; (window as any).menuState = config.menuState
+    }
+  }, [config, mounted, theme, applyThemeColors])
 
   // Separate effect for theme changes only (fast toggle)
   useEffect(() => {
@@ -332,14 +343,18 @@ export function ThemeCustomizer() {
   }, [theme, mounted, config.colors])
 
   const handleSave = () => {
+    // persist config explicitly and reapply colours in case nothing changed
     localStorage.setItem("theme-config", JSON.stringify(config))
-    alert("Theme configuration saved!")
+    const isDark = theme === "dark"
+    applyThemeColors(config, isDark)
+    toast({ title: "Theme saved", description: "Your custom theme settings have been saved." })
+    setIsOpen(false)
   }
 
   const handleReset = () => {
     setConfig(defaultConfig)
     localStorage.removeItem("theme-config")
-    alert("Theme configuration reset to default!")
+    toast({ title: "Theme reset", description: "Configuration reverted to default." })
   }
 
   const updateConfig = (path: string, value: any) => {
@@ -361,6 +376,25 @@ export function ThemeCustomizer() {
   const handleDarkModeToggle = () => {
     setTheme(theme === "dark" ? "light" : "dark")
   }
+
+  // Automatically persist configuration when user makes changes
+  const saveTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
+  useEffect(() => {
+    if (!mounted) return
+
+    if (saveTimeout.current) {
+      clearTimeout(saveTimeout.current)
+    }
+    saveTimeout.current = setTimeout(() => {
+      localStorage.setItem("theme-config", JSON.stringify(config))
+    }, 500)
+
+    return () => {
+      if (saveTimeout.current) {
+        clearTimeout(saveTimeout.current)
+      }
+    }
+  }, [config, mounted])
 
   // Convert HSL to hex for color input with proper error handling
   const hslToHex = (hsl: string): string => {

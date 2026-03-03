@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import Layout from "@/components/cmsfullform/layout"
 import { TransactionsExpensesContent } from "@/components/transactions/expenses-content"
+import { getExpenseTransactions } from "@/lib/transactions"
 
 export const metadata: Metadata = {
     title: "Expenses - CMSFullForm Dashboard",
@@ -8,9 +9,10 @@ export const metadata: Metadata = {
 }
 
 export default function TransactionsExpensesPage() {
+    const expenseTransactions = getExpenseTransactions()
     return (
         <Layout>
-            <TransactionsExpensesContent />
+            <TransactionsExpensesContent transactions={expenseTransactions} />
         </Layout>
     )
 }

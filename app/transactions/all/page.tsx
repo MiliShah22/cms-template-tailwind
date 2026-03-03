@@ -4,12 +4,11 @@ import { TransactionsContent } from "@/components/transactions/content"
 import { getTransactions, getExpenseTransactions } from "@/lib/transactions"
 
 export const metadata: Metadata = {
-    title: "Transactions - CMSFullForm Dashboard",
-    description: "View and manage all financial transactions.",
+    title: "All Transactions - CMSFullForm Dashboard",
+    description: "View and manage all financial transactions (all).",
 }
 
-export default function TransactionsPage() {
-    // server component: pull data from the "CMS" (json file) and hand off to the client widget
+export default function TransactionsAllPage() {
     const transactions = getTransactions()
     const expenseTransactions = getExpenseTransactions()
 

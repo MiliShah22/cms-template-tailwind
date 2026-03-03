@@ -1,3 +1,6 @@
+"use client"
+
+import { useState } from "react"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -5,21 +8,45 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Search, Package, Tag, Filter, Plus, TrendingUp } from "lucide-react"
+import { Search, Package, Tag, Filter, Plus, TrendingUp, Eye } from "lucide-react"
+import Link from "next/link"
 
-import { getProducts, getCategorySlugs, getDisplayName, Product } from "@/lib/products"
+import { getCategorySlugs, getDisplayName, Product } from "@/lib/products"
+import { useAppSelector } from "@/lib/store/hooks"
 
-const products: Product[] = getProducts()
+// pull from redux store instead of static JSON
+// selector will return the currentable array
+const selectProducts = (state: any) => state.products.items
 
 interface ProductsContentProps {
   filterCategory?: string
   hideTabs?: boolean
 }
 
+import { ProductForm } from "./product-form"
+
 export function ProductsContent({
   filterCategory,
   hideTabs = false,
 }: ProductsContentProps) {
+  const products: Product[] = useAppSelector(selectProducts)
+  const [showForm, setShowForm] = useState(false)
+  const [editProduct, setEditProduct] = useState<Product | undefined>()
+  const [prefillCategory, setPrefillCategory] = useState<string | undefined>()
+
+  const openNew = (category?: string) => {
+    // open form for creating a new product; we use prefillCategory
+    setEditProduct(undefined)
+    setPrefillCategory(category)
+    setShowForm(true)
+  }
+  const openEdit = (p: Product) => {
+    setEditProduct(p)
+    setPrefillCategory(undefined)
+    setShowForm(true)
+  }
+  const closeForm = () => setShowForm(false)
+
   // if a filter category was provided it may come from a slug (lowercase)
   // convert to display form so the table filtering works with our mock data
   const displayCategory = filterCategory
@@ -28,8 +55,8 @@ export function ProductsContent({
     filterCategory.charAt(0).toUpperCase() + filterCategory.slice(1)
     : undefined
 
-  // compute stats from the product list
-  const allProducts = getProducts()
+  // compute stats from the redux product list
+  const allProducts = products
   const activeCount = allProducts.filter((p) => p.status === "active").length
   const lowStockCount = allProducts.filter((p) => p.stock < 100).length
   // placeholder trend: calculate % of active increasing vs decreasing?
@@ -58,12 +85,21 @@ export function ProductsContent({
             <Filter className="h-4 w-4" />
             Advanced filters
           </Button>
-          <Button size="sm" className="gap-2">
+          <Button size="sm" className="gap-2" onClick={() => openNew(displayCategory)}>
             <Plus className="h-4 w-4" />
             New product
           </Button>
         </div>
       </div>
+
+      {/* optionally show form */}
+      {showForm && (
+        <Card>
+          <CardContent>
+            <ProductForm initial={editProduct} prefillCategory={prefillCategory} onClose={closeForm} />
+          </CardContent>
+        </Card>
+      )}
 
       {/* Stats */}
       <div className="grid gap-4 md:grid-cols-3">
@@ -152,18 +188,18 @@ export function ProductsContent({
                 ))}
               </TabsList>
               <TabsContent value="all" className="pt-4">
-                <ProductsTable />
+                <ProductsTable onEdit={openEdit} />
               </TabsContent>
               {getCategorySlugs().map((slug) => (
                 <TabsContent key={slug} value={slug} className="pt-4">
-                  <ProductsTable filterCategory={getDisplayName(slug)} />
+                  <ProductsTable filterCategory={getDisplayName(slug)} onEdit={openEdit} />
                 </TabsContent>
               ))}
             </Tabs>
           )}
           {hideTabs && (
             <div className="pt-4">
-              <ProductsTable filterCategory={displayCategory} />
+              <ProductsTable filterCategory={displayCategory} onEdit={openEdit} />
             </div>
           )}
         </CardContent>
@@ -174,9 +210,11 @@ export function ProductsContent({
 
 interface ProductsTableProps {
   filterCategory?: string
+  onEdit?: (product: Product) => void
 }
 
-export function ProductsTable({ filterCategory }: ProductsTableProps) {
+export function ProductsTable({ filterCategory, onEdit }: ProductsTableProps) {
+  const products: Product[] = useAppSelector(selectProducts)
   const rows = filterCategory
     ? products.filter((p) => p.category === filterCategory)
     : products
@@ -192,6 +230,7 @@ export function ProductsTable({ filterCategory }: ProductsTableProps) {
             <TableHead className="hidden sm:table-cell text-right">Stock</TableHead>
             <TableHead className="text-right">Price</TableHead>
             <TableHead className="hidden sm:table-cell text-right">Trend</TableHead>
+            <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -226,6 +265,24 @@ export function ProductsTable({ filterCategory }: ProductsTableProps) {
               <TableCell className="text-right font-medium">{product.price}</TableCell>
               <TableCell className="hidden sm:table-cell text-right text-xs text-emerald-600">
                 {product.trend}
+              </TableCell>
+              <TableCell className="text-right">
+                {onEdit && (
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => onEdit(product)}
+                  >
+                    Edit
+                  </Button>
+                )}
+
+                <Link href={`/products/${product.id}`}>
+                  <Button variant="ghost" size="sm">
+                    <Eye className="h-4 w-4 mr-1" />
+                    View
+                  </Button>
+                </Link>
               </TableCell>
             </TableRow>
           ))}
