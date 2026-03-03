@@ -11,6 +11,9 @@ import { Eye } from "lucide-react"
 import Link from "next/link"
 import { Pagination } from "@/components/shared/pagination"
 
+// generic CSV download helper
+import { downloadCSV } from "@/components/shared/export-utils"
+
 export interface OrderData {
   id: string
   customer: string
@@ -30,18 +33,7 @@ interface OrderTableProps {
 export function exportOrdersCSV(orders: OrderData[], fileName = "orders.csv") {
   const headers = ["Order ID", "Customer", "Total", "Items", "Created At", "Status"]
   const rows = orders.map((o) => [o.id, o.customer, o.total, o.items.toString(), o.createdAt || "", o.status || ""])
-  const csvContent = [headers, ...rows]
-    .map((r) => r.map((c) => `"${c.replace(/"/g, '""')}"`).join(","))
-    .join("\n")
-  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement("a")
-  a.href = url
-  a.setAttribute("download", fileName)
-  document.body.appendChild(a)
-  a.click()
-  document.body.removeChild(a)
-  URL.revokeObjectURL(url)
+  downloadCSV(headers, rows, fileName)
 }
 
 function getStatusColor(status?: string): string {

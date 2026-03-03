@@ -10,6 +10,8 @@ import { Eye } from "lucide-react"
 import Link from "next/link"
 import { Pagination } from "@/components/shared/pagination"
 
+import { downloadCSV } from "@/components/shared/export-utils"
+
 export interface CustomerData {
     id: string
     name: string
@@ -28,18 +30,7 @@ interface CustomerTableProps {
 export function exportCustomersCSV(customers: CustomerData[], fileName = "customers.csv") {
     const headers = ["Customer ID", "Name", "Email", "Phone", "Segment"]
     const rows = customers.map((c) => [c.id, c.name, c.email, c.phone, c.segment])
-    const csvContent = [headers, ...rows]
-        .map((r) => r.map((c) => `"${c.replace(/"/g, '""')}"`).join(","))
-        .join("\n")
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement("a")
-    a.href = url
-    a.setAttribute("download", fileName)
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
-    URL.revokeObjectURL(url)
+    downloadCSV(headers, rows, fileName)
 }
 
 export function CustomerTable({ title, description, customers }: CustomerTableProps) {

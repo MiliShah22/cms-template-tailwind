@@ -11,6 +11,8 @@ import { RecentOrders } from "./recent-orders"
 import { TopProducts } from "./top-products"
 import { SalesTeamActivity } from "./sales-team-activity"
 
+import { downloadCSV } from "@/components/shared/export-utils"
+
 export function DashboardSaasContent() {
   return (
     <div className="space-y-6">
@@ -23,7 +25,13 @@ export function DashboardSaasContent() {
           </p>
         </div>
         <div className="mt-4 sm:mt-0 flex space-x-3">
-          <button className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700">
+          <button
+            className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700"
+            onClick={() => {
+              // simple placeholder export containing a comment row
+              downloadCSV(["Note"], [["Dashboard data export not available"]], "dashboard.csv")
+            }}
+          >
             Export Data
           </button>
           <button className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700">

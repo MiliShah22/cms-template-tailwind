@@ -38,6 +38,9 @@ import { Product } from "@/lib/products"
 import { useAppSelector } from "@/lib/store/hooks"
 import { ProductForm } from "./product-form"
 
+// utility for generating CSV downloads
+import { downloadCSV } from "@/components/shared/export-utils"
+
 // Sample product data - matches the products in all-content.tsx
 const productsData: Record<string, any> = {
     "PRD-1024": {
@@ -223,6 +226,44 @@ export function ProductDetailContent({ productId }: ProductDetailContentProps) {
 
     const product: any = storeProduct || generated
     const [showForm, setShowForm] = useState(false)
+
+    // when user clicks export button
+    const handleExport = () => {
+        if (!product) return
+        const headers = [
+            "ID",
+            "Name",
+            "SKU",
+            "Category",
+            "Price",
+            "Stock",
+            "Status",
+            "Trend",
+            "Sales",
+            "Revenue",
+            "Rating",
+            "Reviews",
+            "Created At",
+            "Updated At",
+        ]
+        const row = [
+            product.id,
+            product.name,
+            product.sku,
+            product.category,
+            product.price?.toString() || "",
+            product.stock?.toString() || "",
+            product.status,
+            product.trend,
+            product.sales?.toString() || "",
+            product.revenue?.toString() || "",
+            product.rating?.toString() || "",
+            product.reviews?.toString() || "",
+            product.createdAt || "",
+            product.updatedAt || "",
+        ]
+        downloadCSV(headers, [row], `${product.id || "product"}.csv`)
+    }
 
     const stockPercentage = Math.min((product.stock / 500) * 100, 100)
     const stockStatus = product.stock < 50 ? "low" : product.stock < 100 ? "medium" : "good"
@@ -516,7 +557,11 @@ export function ProductDetailContent({ productId }: ProductDetailContentProps) {
                                 <Share2 className="h-4 w-4 mr-2" />
                                 Share
                             </Button>
-                            <Button variant="outline" className="w-full justify-start">
+                            <Button
+                                variant="outline"
+                                className="w-full justify-start"
+                                onClick={handleExport}
+                            >
                                 <Download className="h-4 w-4 mr-2" />
                                 Export Data
                             </Button>
