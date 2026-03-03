@@ -36,8 +36,8 @@ export function ForgotForm() {
   return (
     <div className="min-h-screen flex">
       <AuthBrandSection />
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white">
-        <div className="w-full max-w-md">
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white dark:bg-slate-900">
+        <div className="w-full max-w-md text-slate-900 dark:text-slate-100">
           {!isSuccess ? (
             <div className="space-y-6">
               {/* Mobile logo */}
@@ -49,8 +49,8 @@ export function ForgotForm() {
               </div>
 
               <div className="text-center lg:text-left">
-                <h2 className="text-3xl font-bold text-slate-900 mb-2">Forgot your password?</h2>
-                <p className="text-slate-600">
+                <h2 className="text-3xl font-bold mb-2">Forgot your password?</h2>
+                <p className="text-slate-600 dark:text-slate-400">
                   No worries! Enter your email address and we'll send you a link to reset your password.
                 </p>
               </div>
@@ -102,32 +102,32 @@ export function ForgotForm() {
               </div>
 
               <div>
-                <h2 className="text-3xl font-bold text-slate-900 mb-2">Check your email</h2>
-                <p className="text-slate-600 mb-4">
+                <h2 className="text-3xl font-bold mb-2">Check your email</h2>
+                <p className="text-slate-600 dark:text-slate-400 mb-4">
                   We've sent a password reset link to <strong>{email}</strong>
                 </p>
               </div>
 
-              <div className="bg-slate-50 rounded-lg p-6 text-left">
+              <div className="bg-slate-50 dark:bg-slate-800 rounded-lg p-6 text-left">
                 <h3 className="font-semibold text-slate-900 mb-4">What's next?</h3>
                 <div className="space-y-3">
                   <div className="flex items-start space-x-3">
                     <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                       <span className="text-xs font-medium text-blue-600">1</span>
                     </div>
-                    <p className="text-sm text-slate-600">Check your email inbox (and spam folder)</p>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">Check your email inbox (and spam folder)</p>
                   </div>
                   <div className="flex items-start space-x-3">
                     <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                       <span className="text-xs font-medium text-blue-600">2</span>
                     </div>
-                    <p className="text-sm text-slate-600">Click the reset password link in the email</p>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">Click the reset password link in the email</p>
                   </div>
                   <div className="flex items-start space-x-3">
                     <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                       <span className="text-xs font-medium text-blue-600">3</span>
                     </div>
-                    <p className="text-sm text-slate-600">Create a new password and sign in</p>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">Create a new password and sign in</p>
                   </div>
                 </div>
               </div>
@@ -165,7 +165,7 @@ export function ForgotForm() {
                 </div>
                 <p className="text-xs text-slate-400 mt-4">
                   Need help?{" "}
-                  <Link href="/support" className="text-slate-600 hover:text-slate-900">
+                  <Link href="/support" className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200">
                     Contact support
                   </Link>
                 </p>

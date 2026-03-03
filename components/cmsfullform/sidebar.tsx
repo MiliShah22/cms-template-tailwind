@@ -60,6 +60,8 @@ import {
   DollarSign,
   TrendingDown,
   Puzzle,
+  LogIn,
+  RotateCcw,
 } from "lucide-react"
 import Link from "next/link"
 import { useState, useEffect } from "react"
@@ -624,6 +626,98 @@ const menuData: MenuSection[] = [
           },
         ],
       },
+    ],
+  },
+  {
+    id: "authentication",
+    label: "Authentication",
+    items: [
+      {
+        id: "signin",
+        label: "Sign In",
+        href: "/auth/login",
+        icon: LogIn,
+        children: [
+          {
+            id: "signin-v1",
+            label: "Layout 1 (Classic)",
+            href: "/auth/login",
+            icon: LogIn,
+          },
+          {
+            id: "signin-v2",
+            label: "Layout 2 (Centered)",
+            href: "/auth/login-v2",
+            icon: LogIn,
+          },
+          // {
+          //   id: "signin-v3",
+          //   label: "Layout 3 (Split)",
+          //   href: "/auth/login-v3",
+          //   icon: LogIn,
+          // },
+        ],
+      },
+      {
+        id: "signup",
+        label: "Sign Up",
+        href: "/auth/register",
+        icon: UserPlus,
+        children: [
+          {
+            id: "signup-v1",
+            label: "Layout 1 (Classic)",
+            href: "/auth/register",
+            icon: UserPlus,
+          },
+          {
+            id: "signup-v2",
+            label: "Layout 2 (Centered)",
+            href: "/auth/register-v2",
+            icon: UserPlus,
+          },
+        ],
+      },
+      {
+        id: "forgot-password",
+        label: "Forgot Password",
+        href: "/auth/forgot",
+        icon: RotateCcw,
+        children: [
+          {
+            id: "forgot-v1",
+            label: "Layout 1 (Classic)",
+            href: "/auth/forgot",
+            icon: RotateCcw,
+          },
+          {
+            id: "forgot-v2",
+            label: "Layout 2 (Centered)",
+            href: "/auth/forgot-v2",
+            icon: RotateCcw,
+          },
+        ],
+      },
+      {
+        id: "reset-password",
+        label: "Reset Password",
+        href: "/auth/reset-password",
+        icon: Key,
+        children: [
+          {
+            id: "reset-v1",
+            label: "Layout 1 (Classic)",
+            href: "/auth/reset-password",
+            icon: Key,
+          },
+          {
+            id: "reset-v2",
+            label: "Layout 2 (Centered)",
+            href: "/auth/reset-password-v2",
+            icon: Key,
+          },
+        ],
+      }
     ],
   },
   // {

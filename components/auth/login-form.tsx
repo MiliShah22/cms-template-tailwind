@@ -35,89 +35,22 @@ export function LoginForm() {
   return (
     <div className="min-h-screen flex">
       {/* Left Side - Brand */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 relative overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-20" style={{ backgroundImage: `url("${backgroundPattern}")` }} />
 
-        {/* Decorative Elements */}
-        <div className="absolute top-20 left-20 w-32 h-32 bg-blue-500/10 rounded-full blur-xl" />
-        <div className="absolute bottom-20 right-20 w-40 h-40 bg-slate-500/10 rounded-full blur-xl" />
-
-        <div className="relative z-10 flex flex-col justify-center px-12 text-white">
-          {/* Logo */}
-          <div className="flex items-center mb-8">
-            <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center mr-4">
-              <span className="text-slate-900 font-bold text-xl">C</span>
-            </div>
-            <span className="text-2xl font-bold">CMS Full Form</span>
-          </div>
-
-          {/* Main Content */}
-          <h1 className="text-4xl font-bold mb-6">Powerful Content Management System</h1>
-
-          <p className="text-xl text-slate-300 mb-12 leading-relaxed">
-            Streamline your content creation, manage multiple websites, and boost your productivity with our
-            comprehensive CMS platform.
-          </p>
-
-          {/* Features */}
-          <div className="space-y-6 mb-12">
-            <div className="flex items-center">
-              <div className="w-8 h-8 bg-blue-500/20 rounded-full flex items-center justify-center mr-4">
-                <div className="w-2 h-2 bg-blue-400 rounded-full" />
-              </div>
-              <div>
-                <h3 className="font-semibold">Multi-site Management</h3>
-                <p className="text-slate-400 text-sm">Manage multiple websites from a single dashboard with ease.</p>
-              </div>
-            </div>
-
-            <div className="flex items-center">
-              <div className="w-8 h-8 bg-slate-500/20 rounded-full flex items-center justify-center mr-4">
-                <div className="w-2 h-2 bg-slate-400 rounded-full" />
-              </div>
-              <div>
-                <h3 className="font-semibold">Advanced Analytics</h3>
-                <p className="text-slate-400 text-sm">Track performance with detailed analytics and insights.</p>
-              </div>
-            </div>
-
-            <div className="flex items-center">
-              <div className="w-8 h-8 bg-blue-500/20 rounded-full flex items-center justify-center mr-4">
-                <div className="w-2 h-2 bg-blue-400 rounded-full" />
-              </div>
-              <div>
-                <h3 className="font-semibold">Team Collaboration</h3>
-                <p className="text-slate-400 text-sm">Work together seamlessly with role-based permissions.</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Testimonial */}
-          <blockquote className="border-l-4 border-blue-500 pl-6">
-            <p className="text-slate-300 italic mb-2">
-              "This CMS has transformed how we manage our content. The interface is intuitive and the features are
-              exactly what we needed."
-            </p>
-            <cite className="text-sm text-slate-400">— John Doe, Content Manager</cite>
-          </blockquote>
-        </div>
-      </div>
 
       {/* Right Side - Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white">
-        <div className="w-full max-w-md">
+      <div className="w-full flex items-center justify-center p-8 bg-white dark:bg-slate-900">
+        <div className="w-full max-w-md text-slate-900 dark:text-slate-100">
           {/* Mobile Logo */}
           <div className="lg:hidden flex items-center justify-center mb-8">
             <div className="w-12 h-12 bg-slate-900 rounded-lg flex items-center justify-center mr-3">
               <span className="text-white font-bold text-xl">C</span>
             </div>
-            <span className="text-2xl font-bold text-slate-900">CMS Full Form</span>
+            <span className="text-2xl font-bold text-slate-900 dark:text-white">CMS Full Form</span>
           </div>
 
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-slate-900 mb-2">Welcome back</h2>
-            <p className="text-slate-600">Sign in to your account to continue managing your content</p>
+            <h2 className="text-3xl font-bold mb-2">Welcome back</h2>
+            <p className="text-slate-600 dark:text-slate-400">Sign in to your account to continue managing your content</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -171,7 +104,7 @@ export function LoginForm() {
                   Remember me
                 </Label>
               </div>
-              <Link href="/auth/forgot" className="text-sm text-slate-900 hover:text-slate-700 font-medium">
+              <Link href="/auth/forgot" className="text-sm text-slate-900 dark:text-slate-100 hover:text-slate-700 dark:hover:text-slate-300 font-medium">
                 Forgot password?
               </Link>
             </div>
@@ -182,10 +115,10 @@ export function LoginForm() {
 
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-slate-300" />
+                <div className="w-full border-t border-slate-300 dark:border-slate-700" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-slate-500">OR CONTINUE WITH</span>
+                <span className="px-2 bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400">OR CONTINUE WITH</span>
               </div>
             </div>
 
@@ -219,7 +152,7 @@ export function LoginForm() {
 
             <div className="text-center">
               <span className="text-slate-600">Don't have an account? </span>
-              <Link href="/auth/register" className="text-slate-900 hover:text-slate-700 font-medium">
+              <Link href="/auth/register" className="text-slate-900 dark:text-slate-100 hover:text-slate-700 dark:hover:text-slate-300 font-medium">
                 Sign up
               </Link>
             </div>

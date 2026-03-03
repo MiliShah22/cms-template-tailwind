@@ -42,20 +42,20 @@ export function RegisterForm() {
   return (
     <div className="min-h-screen flex">
       <AuthBrandSection />
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white">
-        <div className="w-full max-w-md">
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white dark:bg-slate-900">
+        <div className="w-full max-w-md text-slate-900 dark:text-slate-100">
           <div className="space-y-6">
             {/* Mobile logo */}
             <div className="lg:hidden flex items-center justify-center mb-8">
               <div className="w-12 h-12 bg-slate-900 rounded-lg flex items-center justify-center mr-3">
                 <span className="text-white font-bold text-xl">C</span>
               </div>
-              <h1 className="text-2xl font-bold text-slate-900">CMS Full Form</h1>
+              <h1 className="text-2xl font-bold text-slate-900 dark:text-white">CMS Full Form</h1>
             </div>
 
             <div className="text-center lg:text-left">
-              <h2 className="text-3xl font-bold text-slate-900 mb-2">Create your account</h2>
-              <p className="text-slate-600">Join thousands of content creators using our platform</p>
+              <h2 className="text-3xl font-bold mb-2">Create your account</h2>
+              <p className="text-slate-600 dark:text-slate-400">Join thousands of content creators using our platform</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -152,11 +152,11 @@ export function RegisterForm() {
                   />
                   <Label htmlFor="terms" className="text-sm text-slate-600 leading-5">
                     I agree to the{" "}
-                    <Link href="/terms" className="text-slate-900 hover:text-slate-700 font-medium">
+                    <Link href="/terms" className="text-slate-900 dark:text-slate-100 hover:text-slate-700 dark:hover:text-slate-300 font-medium">
                       Terms of Service
                     </Link>{" "}
                     and{" "}
-                    <Link href="/privacy" className="text-slate-900 hover:text-slate-700 font-medium">
+                    <Link href="/privacy" className="text-slate-900 dark:text-slate-100 hover:text-slate-700 dark:hover:text-slate-300 font-medium">
                       Privacy Policy
                     </Link>
                   </Label>
@@ -180,10 +180,10 @@ export function RegisterForm() {
 
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-slate-200" />
+                <div className="w-full border-t border-slate-200 dark:border-slate-700" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-slate-500">OR CONTINUE WITH</span>
+                <span className="px-2 bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400">OR CONTINUE WITH</span>
               </div>
             </div>
 
@@ -216,9 +216,9 @@ export function RegisterForm() {
             </div>
 
             <div className="text-center">
-              <p className="text-sm text-slate-600">
+              <p className="text-sm text-slate-600 dark:text-slate-400">
                 Already have an account?{" "}
-                <Link href="/auth/login" className="text-slate-900 hover:text-slate-700 font-medium">
+                <Link href="/auth/login" className="text-slate-900 dark:text-slate-100 hover:text-slate-700 dark:hover:text-slate-300 font-medium">
                   Sign in
                 </Link>
               </p>
