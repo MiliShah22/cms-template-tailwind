@@ -1042,7 +1042,7 @@ export default function Sidebar() {
                 className="flex items-center gap-3 w-full"
               >
                 <img
-                  src="/logo-placeholder.svg"
+                  src="/logo.svg"
                   alt="CMSFullForm"
                   width={32}
                   height={32}
@@ -1120,14 +1120,14 @@ export default function Sidebar() {
                 className="flex items-center gap-3 w-full"
               >
                 <img
-                  src="/logo-placeholder.svg"
+                  src="/logo.svg"
                   alt="CMSFullForm"
                   width={32}
                   height={32}
                   className="flex-shrink-0 hidden dark:block"
                 />
                 <img
-                  src="/logo-placeholder.svg"
+                  src="/logo.svg"
                   alt="CMSFullForm"
                   width={32}
                   height={32}
@@ -1140,14 +1140,14 @@ export default function Sidebar() {
             ) : (
               <div className="flex justify-center w-full">
                 <img
-                  src="/logo-placeholder.svg"
+                  src="/logo.svg"
                   alt="CMSFullForm"
                   width={32}
                   height={32}
                   className="flex-shrink-0 hidden dark:block"
                 />
                 <img
-                  src="/logo-placeholder.svg"
+                  src="/logo.svg"
                   alt="CMSFullForm"
                   width={32}
                   height={32}

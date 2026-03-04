@@ -13,7 +13,10 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "CMSFullForm Dashboard - OpenSource CMS",
   description: "CmsFullForm dashboard build with Next.js and Tailwind CSS",
-  generator: 'v0.app'
+  generator: 'v0.app',
+  icons: {
+    icon: '/favicon.svg',
+  },
 }
 
 export default function RootLayout({
