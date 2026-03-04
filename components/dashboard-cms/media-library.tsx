@@ -24,7 +24,7 @@ const mediaFiles: MediaFile[] = [
     uploadDate: "2 hours ago",
     dimensions: "1920x1080",
     downloads: 45,
-    url: "/placeholder.svg?height=120&width=120",
+    url: "/banner-placeholder.svg?height=120&width=120",
   },
   {
     id: "2",
@@ -35,7 +35,7 @@ const mediaFiles: MediaFile[] = [
     dimensions: "1280x720",
     duration: "3:24",
     downloads: 23,
-    url: "/placeholder.svg?height=120&width=120",
+    url: "/product-placeholder.svg?height=120&width=120",
   },
   {
     id: "3",
@@ -44,7 +44,7 @@ const mediaFiles: MediaFile[] = [
     size: "1.2 MB",
     uploadDate: "3 days ago",
     downloads: 156,
-    url: "/placeholder.svg?height=120&width=120",
+    url: "/banner-placeholder.svg?height=120&width=120",
   },
   {
     id: "4",
@@ -54,7 +54,7 @@ const mediaFiles: MediaFile[] = [
     uploadDate: "1 week ago",
     duration: "45:30",
     downloads: 89,
-    url: "/placeholder.svg?height=120&width=120",
+    url: "/logo-placeholder.svg?height=120&width=120",
   },
   {
     id: "5",
@@ -64,7 +64,7 @@ const mediaFiles: MediaFile[] = [
     uploadDate: "1 week ago",
     dimensions: "1080x1920",
     downloads: 67,
-    url: "/placeholder.svg?height=120&width=120",
+    url: "/product-placeholder.svg?height=120&width=120",
   },
   {
     id: "6",
@@ -75,7 +75,7 @@ const mediaFiles: MediaFile[] = [
     dimensions: "1920x1080",
     duration: "2:15",
     downloads: 34,
-    url: "/placeholder.svg?height=120&width=120",
+    url: "/product-placeholder.svg?height=120&width=120",
   },
 ]
 

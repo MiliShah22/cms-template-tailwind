@@ -24,7 +24,7 @@ const scheduledPosts: ScheduledPost[] = [
     title: "Weekly Tech Roundup: Latest Innovations",
     author: {
       name: "Tech Editor",
-      avatar: "/placeholder.svg?height=32&width=32",
+      avatar: "/avatar-placeholder.svg?height=32&width=32",
     },
     category: "Technology",
     scheduledDate: "Today",
@@ -37,7 +37,7 @@ const scheduledPosts: ScheduledPost[] = [
     title: "Market Analysis: Q4 Financial Report",
     author: {
       name: "Financial Analyst",
-      avatar: "/placeholder.svg?height=32&width=32",
+      avatar: "/avatar-placeholder.svg?height=32&width=32",
     },
     category: "Business",
     scheduledDate: "Tomorrow",
@@ -50,7 +50,7 @@ const scheduledPosts: ScheduledPost[] = [
     title: "Breaking: New Climate Policy Announced",
     author: {
       name: "News Reporter",
-      avatar: "/placeholder.svg?height=32&width=32",
+      avatar: "/avatar-placeholder.svg?height=32&width=32",
     },
     category: "Politics",
     scheduledDate: "Dec 28",
@@ -63,7 +63,7 @@ const scheduledPosts: ScheduledPost[] = [
     title: "Health Tips for the New Year",
     author: {
       name: "Health Writer",
-      avatar: "/placeholder.svg?height=32&width=32",
+      avatar: "/avatar-placeholder.svg?height=32&width=32",
     },
     category: "Health",
     scheduledDate: "Jan 1",
@@ -76,7 +76,7 @@ const scheduledPosts: ScheduledPost[] = [
     title: "Sports Highlights: Championship Review",
     author: {
       name: "Sports Editor",
-      avatar: "/placeholder.svg?height=32&width=32",
+      avatar: "/avatar-placeholder.svg?height=32&width=32",
     },
     category: "Sports",
     scheduledDate: "Dec 30",
@@ -112,17 +112,16 @@ export default function PublishingSchedule() {
         {scheduledPosts.map((post) => (
           <div
             key={post.id}
-            className={`flex items-center justify-between p-3 rounded-lg border transition-colors hover:bg-accent/50 ${
-              post.status === "failed"
+            className={`flex items-center justify-between p-3 rounded-lg border transition-colors hover:bg-accent/50 ${post.status === "failed"
                 ? "border-red-200 dark:border-red-800 bg-red-50/50 dark:bg-red-900/10"
                 : post.status === "publishing"
                   ? "border-green-200 dark:border-green-800 bg-green-50/50 dark:bg-green-900/10"
                   : "border-border"
-            }`}
+              }`}
           >
             <div className="flex items-center space-x-3 flex-1 min-w-0">
               <Avatar className="h-8 w-8 flex-shrink-0">
-                <AvatarImage src={post.author.avatar || "/placeholder.svg"} alt={post.author.name} />
+                <AvatarImage src={post.author.avatar || "/avatar-placeholder.svg"} alt={post.author.name} />
                 <AvatarFallback className="text-xs">
                   {post.author.name
                     .split(" ")

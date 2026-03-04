@@ -22,7 +22,7 @@ const activities: Activity[] = [
     id: "1",
     user: {
       name: "Sarah Johnson",
-      avatar: "/placeholder.svg?height=32&width=32",
+      avatar: "/avatar-placeholder.svg?height=32&width=32",
       role: "Editor",
     },
     action: "created",
@@ -34,7 +34,7 @@ const activities: Activity[] = [
     id: "2",
     user: {
       name: "Mike Chen",
-      avatar: "/placeholder.svg?height=32&width=32",
+      avatar: "/avatar-placeholder.svg?height=32&width=32",
       role: "Writer",
     },
     action: "edited",
@@ -46,7 +46,7 @@ const activities: Activity[] = [
     id: "3",
     user: {
       name: "Emma Wilson",
-      avatar: "/placeholder.svg?height=32&width=32",
+      avatar: "/avatar-placeholder.svg?height=32&width=32",
       role: "Admin",
     },
     action: "uploaded",
@@ -58,7 +58,7 @@ const activities: Activity[] = [
     id: "4",
     user: {
       name: "Alex Rodriguez",
-      avatar: "/placeholder.svg?height=32&width=32",
+      avatar: "/avatar-placeholder.svg?height=32&width=32",
       role: "Moderator",
     },
     action: "commented",
@@ -70,7 +70,7 @@ const activities: Activity[] = [
     id: "5",
     user: {
       name: "Lisa Wang",
-      avatar: "/placeholder.svg?height=32&width=32",
+      avatar: "/avatar-placeholder.svg?height=32&width=32",
       role: "Writer",
     },
     action: "deleted",
@@ -82,7 +82,7 @@ const activities: Activity[] = [
     id: "6",
     user: {
       name: "John Smith",
-      avatar: "/placeholder.svg?height=32&width=32",
+      avatar: "/avatar-placeholder.svg?height=32&width=32",
       role: "Viewer",
     },
     action: "viewed",
@@ -169,7 +169,7 @@ export default function UserActivity() {
               <div className="flex items-center justify-between mb-1">
                 <div className="flex items-center space-x-2">
                   <Avatar className="h-6 w-6">
-                    <AvatarImage src={activity.user.avatar || "/placeholder.svg"} alt={activity.user.name} />
+                    <AvatarImage src={activity.user.avatar || "/avatar-placeholder.svg"} alt={activity.user.name} />
                     <AvatarFallback className="text-xs">
                       {activity.user.name
                         .split(" ")

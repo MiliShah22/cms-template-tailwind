@@ -22,7 +22,7 @@ const products: Product[] = [
     sales: 624,
     mrr: "$11,856",
     change: 12.5,
-    image: "/placeholder.svg?height=48&width=48",
+    image: "/product-placeholder.svg?height=48&width=48",
   },
   {
     id: "PRD-1008",
@@ -31,7 +31,7 @@ const products: Product[] = [
     sales: 341,
     mrr: "$16,709",
     change: 8.2,
-    image: "/placeholder.svg?height=48&width=48",
+    image: "/product-placeholder.svg?height=48&width=48",
   },
   {
     id: "PRD-0992",
@@ -40,7 +40,7 @@ const products: Product[] = [
     sales: 487,
     mrr: "$4,383",
     change: 23.1,
-    image: "/placeholder.svg?height=48&width=48",
+    image: "/product-placeholder.svg?height=48&width=48",
   },
   {
     id: "PRD-0975",
@@ -49,7 +49,7 @@ const products: Product[] = [
     sales: 128,
     mrr: "$1,920",
     change: 4.7,
-    image: "/placeholder.svg?height=48&width=48",
+    image: "/product-placeholder.svg?height=48&width=48",
   },
   {
     id: "PRD-0960",
@@ -58,7 +58,7 @@ const products: Product[] = [
     sales: 92,
     mrr: "$2,208",
     change: -1.9,
-    image: "/placeholder.svg?height=48&width=48",
+    image: "/product-placeholder.svg?height=48&width=48",
   },
 ]
 
@@ -84,7 +84,7 @@ export default function TopProducts() {
                 {index + 1}
               </div>
               <Image
-                src={product.image || "/placeholder.svg"}
+                src={product.image || "/product-placeholder.svg"}
                 alt={product.name}
                 width={48}
                 height={48}

@@ -57,7 +57,9 @@ export default function RootLayout({
 
                     // Apply layout
                     document.documentElement.dir = config.layout;
-                    document.body.dir = config.layout;
+                    if (document.body) {
+                      document.body.dir = config.layout;
+                    }
                   }
                 } catch (error) {
                   console.error('Failed to load theme config:', error);

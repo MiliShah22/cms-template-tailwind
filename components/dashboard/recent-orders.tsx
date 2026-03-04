@@ -22,7 +22,7 @@ const orders: Order[] = [
     customer: {
       name: "Jane Cooper",
       email: "jane.cooper@example.com",
-      avatar: "/placeholder.svg?height=32&width=32",
+      avatar: "/avatar-placeholder.svg?height=32&width=32",
     },
     product: "CMS Pro Plan – Yearly",
     amount: "$588.00",
@@ -34,7 +34,7 @@ const orders: Order[] = [
     customer: {
       name: "Cody Fisher",
       email: "cody.fisher@example.com",
-      avatar: "/placeholder.svg?height=32&width=32",
+      avatar: "/avatar-placeholder.svg?height=32&width=32",
     },
     product: "CMS Starter Plan – Monthly",
     amount: "$19.00",
@@ -46,7 +46,7 @@ const orders: Order[] = [
     customer: {
       name: "Kristin Watson",
       email: "kristin.watson@example.com",
-      avatar: "/placeholder.svg?height=32&width=32",
+      avatar: "/avatar-placeholder.svg?height=32&width=32",
     },
     product: "SEO Toolkit Addon",
     amount: "$9.00",
@@ -58,7 +58,7 @@ const orders: Order[] = [
     customer: {
       name: "Devon Lane",
       email: "devon.lane@example.com",
-      avatar: "/placeholder.svg?height=32&width=32",
+      avatar: "/avatar-placeholder.svg?height=32&width=32",
     },
     product: "Analytics Upgrade",
     amount: "$15.00",
@@ -70,7 +70,7 @@ const orders: Order[] = [
     customer: {
       name: "Sofia Davis",
       email: "sofia.davis@example.com",
-      avatar: "/placeholder.svg?height=32&width=32",
+      avatar: "/avatar-placeholder.svg?height=32&width=32",
     },
     product: "CMS Pro Plan – Monthly",
     amount: "$49.00",

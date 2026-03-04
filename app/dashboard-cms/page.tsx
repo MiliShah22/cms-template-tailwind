@@ -3,8 +3,8 @@ import Content from "@/components/dashboard-cms/content"
 import Layout from "@/components/cmsfullform/layout"
 
 export const metadata: Metadata = {
-  title: "CMSFullForm Dashboard - OpenSource CMS",
-  description: "CmsFullForm dashboard build with Next.js and Tailwind CSS",
+  title: "CMS Dashboard - CMSFullForm",
+  description: "Comprehensive CMS management dashboard with content, users, and settings.",
 }
 
 export default function DashboardCMSPage() {

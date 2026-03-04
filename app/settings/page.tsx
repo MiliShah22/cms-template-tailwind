@@ -3,8 +3,8 @@ import Content from "@/components/settings/content"
 import Layout from "@/components/cmsfullform/layout"
 
 export const metadata: Metadata = {
-  title: "CMSFullForm Dashboard - OpenSource CMS",
-  description: "CmsFullForm dashboard build with Next.js and Tailwind CSS",
+  title: "Settings - CMSFullForm Dashboard",
+  description: "Manage your account settings, preferences, and system configurations.",
 }
 
 export default function SettingsPage() {

@@ -23,7 +23,7 @@ const comments: Comment[] = [
     id: "1",
     author: {
       name: "John Smith",
-      avatar: "/placeholder.svg?height=32&width=32",
+      avatar: "/avatar-placeholder.svg?height=32&width=32",
     },
     content: "Great article! This really helped me understand the concept better.",
     article: "The Future of AI in Healthcare",
@@ -35,7 +35,7 @@ const comments: Comment[] = [
     id: "2",
     author: {
       name: "Sarah Wilson",
-      avatar: "/placeholder.svg?height=32&width=32",
+      avatar: "/avatar-placeholder.svg?height=32&width=32",
     },
     content: "I disagree with some points mentioned here. The data seems outdated.",
     article: "Global Economic Trends 2024",
@@ -47,7 +47,7 @@ const comments: Comment[] = [
     id: "3",
     author: {
       name: "Mike Johnson",
-      avatar: "/placeholder.svg?height=32&width=32",
+      avatar: "/avatar-placeholder.svg?height=32&width=32",
     },
     content: "Thanks for sharing this! Could you provide more sources?",
     article: "Climate Change Solutions",
@@ -60,7 +60,7 @@ const comments: Comment[] = [
     id: "4",
     author: {
       name: "Emma Davis",
-      avatar: "/placeholder.svg?height=32&width=32",
+      avatar: "/avatar-placeholder.svg?height=32&width=32",
     },
     content: "This is spam content that should be removed immediately.",
     article: "Remote Work Culture",
@@ -72,7 +72,7 @@ const comments: Comment[] = [
     id: "5",
     author: {
       name: "Alex Chen",
-      avatar: "/placeholder.svg?height=32&width=32",
+      avatar: "/avatar-placeholder.svg?height=32&width=32",
     },
     content: "Excellent insights! Looking forward to more content like this.",
     article: "Quantum Computing Research",
@@ -100,17 +100,16 @@ export default function RecentComments() {
         {comments.map((comment) => (
           <div
             key={comment.id}
-            className={`p-3 rounded-lg border transition-colors hover:bg-accent/50 ${
-              comment.status === "flagged"
+            className={`p-3 rounded-lg border transition-colors hover:bg-accent/50 ${comment.status === "flagged"
                 ? "border-red-200 dark:border-red-800 bg-red-50/50 dark:bg-red-900/10"
                 : comment.status === "pending"
                   ? "border-yellow-200 dark:border-yellow-800 bg-yellow-50/50 dark:bg-yellow-900/10"
                   : "border-border"
-            }`}
+              }`}
           >
             <div className="flex items-start space-x-3">
               <Avatar className="h-7 w-7 flex-shrink-0">
-                <AvatarImage src={comment.author.avatar || "/placeholder.svg"} alt={comment.author.name} />
+                <AvatarImage src={comment.author.avatar || "/avatar-placeholder.svg"} alt={comment.author.name} />
                 <AvatarFallback className="text-xs">
                   {comment.author.name
                     .split(" ")

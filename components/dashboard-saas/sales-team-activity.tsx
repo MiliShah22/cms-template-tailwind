@@ -8,7 +8,7 @@ export function SalesTeamActivity() {
   const activities = [
     {
       user: "Sarah Johnson",
-      avatar: "/placeholder.svg?height=32&width=32",
+      avatar: "/avatar-placeholder.svg?height=32&width=32",
       action: "Closed deal with TechCorp",
       value: "$15,000",
       time: "5 min ago",
@@ -17,7 +17,7 @@ export function SalesTeamActivity() {
     },
     {
       user: "Mike Chen",
-      avatar: "/placeholder.svg?height=32&width=32",
+      avatar: "/avatar-placeholder.svg?height=32&width=32",
       action: "Called prospect",
       value: "Follow-up scheduled",
       time: "12 min ago",
@@ -26,7 +26,7 @@ export function SalesTeamActivity() {
     },
     {
       user: "Emma Wilson",
-      avatar: "/placeholder.svg?height=32&width=32",
+      avatar: "/avatar-placeholder.svg?height=32&width=32",
       action: "Sent proposal",
       value: "$8,500 potential",
       time: "25 min ago",
@@ -35,7 +35,7 @@ export function SalesTeamActivity() {
     },
     {
       user: "David Brown",
-      avatar: "/placeholder.svg?height=32&width=32",
+      avatar: "/avatar-placeholder.svg?height=32&width=32",
       action: "Updated lead status",
       value: "Hot prospect",
       time: "1 hour ago",
@@ -44,7 +44,7 @@ export function SalesTeamActivity() {
     },
     {
       user: "Lisa Wang",
-      avatar: "/placeholder.svg?height=32&width=32",
+      avatar: "/avatar-placeholder.svg?height=32&width=32",
       action: "Scheduled demo",
       value: "Tomorrow 2 PM",
       time: "2 hours ago",
@@ -70,7 +70,7 @@ export function SalesTeamActivity() {
               className="flex items-start space-x-3 p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg"
             >
               <Avatar className="h-8 w-8">
-                <AvatarImage src={activity.avatar || "/placeholder.svg"} alt={activity.user} />
+                <AvatarImage src={activity.avatar || "/avatar-placeholder.svg"} alt={activity.user} />
                 <AvatarFallback>
                   {activity.user
                     .split(" ")

@@ -46,8 +46,13 @@ export function ThemeConfigLoader() {
 
                     // Apply layout
                     if (config.layout) {
-                        document.documentElement.dir = config.layout
-                        document.body.dir = config.layout
+                        // guard in case body isn't available yet (some loaders or early mounts)
+                        if (document.documentElement) {
+                            document.documentElement.dir = config.layout
+                        }
+                        if (document.body) {
+                            document.body.dir = config.layout
+                        }
                     }
                 }
             } catch (error) {

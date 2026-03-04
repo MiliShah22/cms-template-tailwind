@@ -25,7 +25,7 @@ const posts: Post[] = [
     title: "The Future of Artificial Intelligence in Healthcare",
     author: {
       name: "Dr. Sarah Johnson",
-      avatar: "/placeholder.svg?height=32&width=32",
+      avatar: "/avatar-placeholder.svg?height=32&width=32",
     },
     category: "Technology",
     status: "published",
@@ -39,7 +39,7 @@ const posts: Post[] = [
     title: "Global Economic Trends: What to Expect in 2024",
     author: {
       name: "Michael Chen",
-      avatar: "/placeholder.svg?height=32&width=32",
+      avatar: "/avatar-placeholder.svg?height=32&width=32",
     },
     category: "Business",
     status: "published",
@@ -52,7 +52,7 @@ const posts: Post[] = [
     title: "Climate Change Solutions: Innovative Technologies",
     author: {
       name: "Emma Rodriguez",
-      avatar: "/placeholder.svg?height=32&width=32",
+      avatar: "/avatar-placeholder.svg?height=32&width=32",
     },
     category: "Science",
     status: "scheduled",
@@ -65,7 +65,7 @@ const posts: Post[] = [
     title: "The Rise of Remote Work Culture",
     author: {
       name: "Alex Thompson",
-      avatar: "/placeholder.svg?height=32&width=32",
+      avatar: "/avatar-placeholder.svg?height=32&width=32",
     },
     category: "Business",
     status: "draft",
@@ -78,7 +78,7 @@ const posts: Post[] = [
     title: "Breakthrough in Quantum Computing Research",
     author: {
       name: "Dr. Lisa Wang",
-      avatar: "/placeholder.svg?height=32&width=32",
+      avatar: "/avatar-placeholder.svg?height=32&width=32",
     },
     category: "Technology",
     status: "review",
@@ -113,13 +113,12 @@ export default function RecentPosts() {
         {posts.map((post) => (
           <div
             key={post.id}
-            className={`flex items-center justify-between p-3 rounded-lg border transition-colors hover:bg-accent/50 ${
-              post.featured ? "border-primary/20 bg-primary/5" : "border-border"
-            }`}
+            className={`flex items-center justify-between p-3 rounded-lg border transition-colors hover:bg-accent/50 ${post.featured ? "border-primary/20 bg-primary/5" : "border-border"
+              }`}
           >
             <div className="flex items-center space-x-3 flex-1 min-w-0">
               <Avatar className="h-8 w-8 flex-shrink-0">
-                <AvatarImage src={post.author.avatar || "/placeholder.svg"} alt={post.author.name} />
+                <AvatarImage src={post.author.avatar || "/avatar-placeholder.svg"} alt={post.author.name} />
                 <AvatarFallback className="text-xs">
                   {post.author.name
                     .split(" ")

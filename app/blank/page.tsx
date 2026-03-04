@@ -3,8 +3,8 @@ import Layout from "@/components/cmsfullform/layout"
 import { BlankContent } from "@/components/blank"
 
 export const metadata: Metadata = {
-  title: "CMSFullForm Dashboard - OpenSource CMS",
-  description: "CmsFullForm dashboard build with Next.js and Tailwind CSS",
+  title: "Blank Page - CMSFullForm Dashboard",
+  description: "Blank page template for creating new dashboard pages.",
 }
 
 export default function BlankPage() {

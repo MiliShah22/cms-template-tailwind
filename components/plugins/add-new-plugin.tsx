@@ -282,7 +282,7 @@ export function AddNewPlugin() {
                   <div className="flex gap-3">
                     <div className="w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-md flex-shrink-0 flex items-center justify-center">
                       <img
-                        src={plugin.images[0] || "/placeholder.svg"}
+                        src={plugin.images[0] || "/product-placeholder.svg"}
                         alt={plugin.name}
                         className="w-full h-full object-cover rounded-md"
                       />
@@ -360,9 +360,8 @@ export function AddNewPlugin() {
           <CardContent className="space-y-4">
             {/* Drag & Drop Area */}
             <div
-              className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
-                dragActive ? "border-blue-500 bg-blue-50 dark:bg-blue-950" : "border-gray-300 dark:border-gray-600"
-              }`}
+              className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${dragActive ? "border-blue-500 bg-blue-50 dark:bg-blue-950" : "border-gray-300 dark:border-gray-600"
+                }`}
               onDragEnter={handleDrag}
               onDragLeave={handleDrag}
               onDragOver={handleDrag}

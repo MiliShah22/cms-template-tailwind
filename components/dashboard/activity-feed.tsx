@@ -30,7 +30,7 @@ const activities: Activity[] = [
     time: "2 minutes ago",
     user: {
       name: "Jane Cooper",
-      avatar: "/placeholder.svg?height=32&width=32",
+      avatar: "/avatar-placeholder.svg?height=32&width=32",
     },
     metadata: {
       amount: "$588.00",
@@ -44,7 +44,7 @@ const activities: Activity[] = [
     time: "15 minutes ago",
     user: {
       name: "Cody Fisher",
-      avatar: "/placeholder.svg?height=32&width=32",
+      avatar: "/avatar-placeholder.svg?height=32&width=32",
     },
   },
   {
@@ -55,7 +55,7 @@ const activities: Activity[] = [
     time: "1 hour ago",
     user: {
       name: "Kristin Watson",
-      avatar: "/placeholder.svg?height=32&width=32",
+      avatar: "/avatar-placeholder.svg?height=32&width=32",
     },
     metadata: {
       rating: 5,
@@ -149,7 +149,7 @@ export default function ActivityFeed() {
                   {activity.user && (
                     <div className="flex items-center space-x-2">
                       <Avatar className="h-6 w-6">
-                        <AvatarImage src={activity.user.avatar || "/placeholder.svg"} alt={activity.user.name} />
+                        <AvatarImage src={activity.user.avatar || "/avatar-placeholder.svg"} alt={activity.user.name} />
                         <AvatarFallback className="text-xs">
                           {activity.user.name
                             .split(" ")

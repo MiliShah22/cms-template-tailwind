@@ -120,12 +120,12 @@ const menuData: MenuSection[] = [
         icon: Home,
         badge: "3",
         children: [
-          // {
-          //   id: "analytics",
-          //   label: "Analytics",
-          //   href: "/dashboard/analytics",
-          //   icon: BarChart2,
-          // },
+          {
+            id: "dashboard",
+            label: "Dashboard",
+            href: "/dashboard",
+            icon: Home,
+          },
           {
             id: "reports",
             label: "Reports",
@@ -1036,13 +1036,13 @@ export default function Sidebar() {
             {/* Header */}
             <div className="h-16 px-3 flex items-center border-b border-gray-200 dark:border-[#1F1F23]">
               <Link
-                href="https://cmsfullform.com/"
+                href="https://cms-template-tailwind.vercel.app/dashboard"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-3 w-full"
               >
                 <img
-                  src="https://cmsfullform.com/themes/cmsfullform/Backend/Assets/favicon/apple-icon-60x60.png"
+                  src="/logo-placeholder.svg"
                   alt="CMSFullForm"
                   width={32}
                   height={32}
@@ -1114,20 +1114,20 @@ export default function Sidebar() {
           <div className="h-16 px-3 flex items-center border-b border-gray-200 dark:border-[#1F1F23]">
             {showText ? (
               <Link
-                href=""
+                href="https://cms-template-tailwind.vercel.app/dashboard"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-3 w-full"
               >
                 <img
-                  src="https://cmsfullform.com/themes/cmsfullform/Backend/Assets/favicon/apple-icon-60x60.png"
+                  src="/logo-placeholder.svg"
                   alt="CMSFullForm"
                   width={32}
                   height={32}
                   className="flex-shrink-0 hidden dark:block"
                 />
                 <img
-                  src="https://cmsfullform.com/themes/cmsfullform/Backend/Assets/favicon/apple-icon-60x60.png"
+                  src="/logo-placeholder.svg"
                   alt="CMSFullForm"
                   width={32}
                   height={32}
@@ -1140,14 +1140,14 @@ export default function Sidebar() {
             ) : (
               <div className="flex justify-center w-full">
                 <img
-                  src="https://cmsfullform.com/themes/cmsfullform/Backend/Assets/favicon/apple-icon-60x60.png"
+                  src="/logo-placeholder.svg"
                   alt="CMSFullForm"
                   width={32}
                   height={32}
                   className="flex-shrink-0 hidden dark:block"
                 />
                 <img
-                  src="https://cmsfullform.com/themes/cmsfullform/Backend/Assets/favicon/apple-icon-60x60.png"
+                  src="/logo-placeholder.svg"
                   alt="CMSFullForm"
                   width={32}
                   height={32}

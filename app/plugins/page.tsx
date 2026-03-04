@@ -3,8 +3,8 @@ import Layout from "@/components/cmsfullform/layout"
 import Content from "@/components/plugins/content"
 
 export const metadata: Metadata = {
-  title: "CMSFullForm Dashboard - OpenSource CMS",
-  description: "CmsFullForm dashboard build with Next.js and Tailwind CSS",
+  title: "Plugins - CMSFullForm Dashboard",
+  description: "Browse, install, and manage plugins to extend your CMS functionality.",
 }
 
 export default function PluginsPage() {
