@@ -68,7 +68,7 @@ export function OrderTable({ title, description, orders }: OrderTableProps) {
           >
             Export
           </Button>
-          <Button size="sm">Add Order</Button>
+          {/* <Button size="sm">Add Order</Button> */}
         </div>
       </div>
 

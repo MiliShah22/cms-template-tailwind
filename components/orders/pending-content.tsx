@@ -7,9 +7,10 @@ import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
-import { Clock, Filter, RefreshCw } from "lucide-react"
+import { Clock, Filter, RefreshCw, Eye } from "lucide-react"
 import { getOrders, Order } from "@/lib/orders"
 import { exportOrdersCSV, OrderData } from "@/components/shared/order-table"
+import Link from "next/link"
 
 function calcAge(created: string): string {
   const then = new Date(created)
@@ -178,6 +179,7 @@ export function PendingOrdersContent() {
                   <TableHead className="hidden sm:table-cell text-right">Items</TableHead>
                   <TableHead className="text-right">Total</TableHead>
                   <TableHead className="hidden sm:table-cell text-right">Waiting</TableHead>
+                  <TableHead className="hidden sm:table-cell text-right">Action</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -202,6 +204,13 @@ export function PendingOrdersContent() {
                     <TableCell className="text-right font-medium">{order.total}</TableCell>
                     <TableCell className="hidden sm:table-cell text-right text-xs text-gray-500">
                       {order.createdAt ? calcAge(order.createdAt) : '-'}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Link href={`/orders/${order.id}`}>
+                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                      </Link>
                     </TableCell>
                   </TableRow>
                 ))}

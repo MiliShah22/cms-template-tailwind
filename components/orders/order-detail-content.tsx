@@ -575,10 +575,10 @@ export function OrderDetailContent({ orderId }: OrderDetailContentProps) {
                         </p>
                     </div>
                     <div className="flex gap-2">
-                        <Button variant="outline" size="sm">
+                        {/* <Button variant="outline" size="sm">
                             <Edit className="h-4 w-4 mr-2" />
                             Edit Order
-                        </Button>
+                        </Button> */}
                         <Button variant="outline" size="sm" onClick={() => generatePrintableOrder(order)}>
                             <Printer className="h-4 w-4 mr-2" />
                             Print
