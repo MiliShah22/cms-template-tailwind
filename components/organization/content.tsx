@@ -354,7 +354,8 @@ export function OrganizationContent() {
                         <Globe className="h-4 w-4 text-gray-400" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-semibold">{organization.website}</div>
+                        <div className="text-2xl break-normal
+ font-semibold">{organization.website}</div>
                         <p className="mt-1 text-xs text-gray-500">Official website</p>
                     </CardContent>
                 </Card>
