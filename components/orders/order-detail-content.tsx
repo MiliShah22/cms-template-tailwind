@@ -70,9 +70,10 @@ const sampleCustomers = [
 
 // Function to generate deterministic order data based on order ID
 function generateOrderData(orderId: string) {
-    // Extract numeric part from order ID
-    const numericPart = parseInt(orderId.replace(/\D/g, '')) || Math.floor(Math.random() * 10000)
+    // Extract numeric part from order ID - deterministic
+    const numericPart = parseInt(orderId.replace(/\D/g, '')) || 1234 // Fixed fallback instead of random
     const seed = numericPart % 1000
+
 
     // Use seed to generate consistent data for same order ID
     const customerIndex = seed % sampleCustomers.length

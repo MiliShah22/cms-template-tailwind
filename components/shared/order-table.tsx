@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -53,6 +53,19 @@ export function OrderTable({ title, description, orders }: OrderTableProps) {
   const totalPages = Math.ceil(orders.length / pageSize)
   const pagedOrders = orders.slice((currentPage - 1) * pageSize, currentPage * pageSize)
 
+  const totalRevenue = useMemo(() => {
+    return orders.reduce((sum, order) => {
+      const price = parseFloat(order.total.replace(/[$, ]/g, ''))
+      return sum + price
+    }, 0).toLocaleString('en-US', { style: 'currency', currency: 'USD' })
+  }, [orders])
+
+  const avgOrderValue = useMemo(() => {
+    if (orders.length === 0) return '$0.00'
+    const avg = orders.reduce((sum, order) => sum + parseFloat(order.total.replace(/[$, ]/g, '')), 0) / orders.length
+    return avg.toLocaleString('en-US', { style: 'currency', currency: 'USD' })
+  }, [orders])
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -89,7 +102,7 @@ export function OrderTable({ title, description, orders }: OrderTableProps) {
             <Badge variant="secondary">Live</Badge>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">$12,450</div>
+            <div className="text-2xl font-bold">{totalRevenue}</div>
             <p className="text-xs text-gray-500">+8% from last month</p>
           </CardContent>
         </Card>
@@ -99,7 +112,7 @@ export function OrderTable({ title, description, orders }: OrderTableProps) {
             <Badge variant="secondary">Live</Badge>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">$248</div>
+            <div className="text-2xl font-bold">{avgOrderValue}</div>
             <p className="text-xs text-gray-500">+4% from last month</p>
           </CardContent>
         </Card>

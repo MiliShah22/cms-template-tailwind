@@ -8,12 +8,14 @@ import { useEffect } from 'react'
  */
 export function ThemeConfigLoader() {
     useEffect(() => {
-        // Reload theme config from localStorage on every mount
+        // Reload theme config from localStorage on every mount - SSR safe
         const reloadTheme = () => {
+            if (typeof document === 'undefined') return; // SSR guard
             try {
                 const savedConfig = localStorage.getItem('theme-config')
                 if (savedConfig) {
                     const config = JSON.parse(savedConfig)
+
                     const isDark = document.documentElement.classList.contains('dark')
                     const colors = isDark ? config.colors.dark : config.colors.light
 
@@ -46,7 +48,6 @@ export function ThemeConfigLoader() {
 
                     // Apply layout
                     if (config.layout) {
-                        // guard in case body isn't available yet (some loaders or early mounts)
                         if (document.documentElement) {
                             document.documentElement.dir = config.layout
                         }
@@ -59,6 +60,7 @@ export function ThemeConfigLoader() {
                 console.error('Failed to reload theme config:', error)
             }
         }
+
 
         // Reload on mount
         reloadTheme()

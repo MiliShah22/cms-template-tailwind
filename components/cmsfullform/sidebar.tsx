@@ -889,8 +889,9 @@ export default function Sidebar() {
 
   // Export functions to window for TopNav and ThemeCustomizer to access
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (typeof document !== 'undefined') {
       ; (window as any).toggleMenuState = toggleMenuState
+
         ; (window as any).menuState = menuState
         ; (window as any).isHovered = isHovered
         ; (window as any).isMobile = isMobile

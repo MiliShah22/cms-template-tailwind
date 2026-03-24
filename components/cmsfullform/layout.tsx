@@ -25,10 +25,11 @@ export default function Layout({ children }: LayoutProps) {
   // Listen for menu state changes and hover state
   useEffect(() => {
     const checkMenuState = () => {
-      if (typeof window !== "undefined") {
+      if (typeof document !== 'undefined') {
         if ((window as any).menuState) {
           setMenuState((window as any).menuState)
         }
+
         if ((window as any).isHovered !== undefined) {
           setIsHovered((window as any).isHovered)
         }

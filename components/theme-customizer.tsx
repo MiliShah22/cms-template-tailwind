@@ -269,16 +269,15 @@ export function ThemeCustomizer() {
     const isDark = theme === "dark"
     applyThemeColors(finalConfig, isDark)
 
-    // Apply menu state
-    if (typeof window !== "undefined" && (window as any).setMenuStateFromCustomizer) {
+    // Apply menu state - already SSR safe in useEffect
+    if ((window as any).setMenuStateFromCustomizer) {
       ; (window as any).setMenuStateFromCustomizer(finalConfig.menuState)
     }
 
     // Keep window variables in sync
-    if (typeof window !== "undefined") {
-      ; (window as any).menuState = finalConfig.menuState
-    }
+    ; (window as any).menuState = finalConfig.menuState
   }, [mounted, theme, applyThemeColors])
+
 
   // Reapply when config changes
   useEffect(() => {
@@ -287,16 +286,15 @@ export function ThemeCustomizer() {
     const isDark = theme === "dark"
     applyThemeColors(config, isDark)
 
-    // Apply menu state
-    if (typeof window !== "undefined" && (window as any).setMenuStateFromCustomizer) {
+    // Apply menu state - SSR safe
+    if ((window as any).setMenuStateFromCustomizer) {
       ; (window as any).setMenuStateFromCustomizer(config.menuState)
     }
 
     // Keep window.menuState in sync for debugging and other scripts
-    if (typeof window !== "undefined") {
-      ; (window as any).menuState = config.menuState
-    }
+    ; (window as any).menuState = config.menuState
   }, [config, mounted, theme, applyThemeColors])
+
 
   // Separate effect for theme changes only (fast toggle)
   useEffect(() => {

@@ -81,17 +81,21 @@ export default function TopNav() {
     }
   }
   const handleMenuToggle = () => {
-    if (typeof window !== "undefined" && (window as any).toggleMenuState) {
+
+    if (typeof document !== 'undefined' && (window as any).toggleMenuState) {
       ; (window as any).toggleMenuState()
     }
   }
 
   const handleMobileMenuToggle = () => {
-    if (typeof window !== "undefined" && (window as any).setIsMobileMenuOpen) {
+
+    if (typeof document !== 'undefined' && (window as any).setIsMobileMenuOpen) {
       const currentState = (window as any).isMobileMenuOpen || false
         ; (window as any).setIsMobileMenuOpen(!currentState)
     }
   }
+
+
 
   return (
     <div className="flex items-center justify-between h-full px-4 lg:px-6">

@@ -8,9 +8,7 @@ export const metadata: Metadata = {
 }
 
 interface OrderDetailPageProps {
-    params: {
-        id: string
-    }
+    params: Promise<{ id: string }>
 }
 
 import { getOrders } from "@/lib/orders"
@@ -19,10 +17,12 @@ export function generateStaticParams() {
     return getOrders().map((o) => ({ id: o.id }))
 }
 
-export default function OrderDetailPage({ params }: OrderDetailPageProps) {
+export default async function OrderDetailPage({ params }: OrderDetailPageProps) {
+    const { id } = await params
     return (
         <Layout>
-            <OrderDetailContent orderId={params.id} />
+            <OrderDetailContent orderId={id} />
         </Layout>
     )
 }
+

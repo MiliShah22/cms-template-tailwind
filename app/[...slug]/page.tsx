@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { notFound } from 'next/navigation'
 import Layout from "@/components/cmsfullform/layout"
 import { PlaceholderPage } from "@/components/cmsfullform/placeholder-page"
 
@@ -14,7 +15,13 @@ interface CatchAllPageProps {
 }
 
 export default function CatchAllPage({ params }: CatchAllPageProps) {
-  const path = "/" + (params.slug ?? []).join("/")
+  const slug = params.slug ?? []
+  const path = "/" + slug.join("/")
+
+  // Skip known dynamic routes like /customers/[id], /orders/[id] etc.
+  if (slug.length === 2 && ['customers', 'orders', 'products', 'projects'].includes(slug[0])) {
+    notFound()
+  }
 
   return (
     <Layout>
@@ -22,5 +29,3 @@ export default function CatchAllPage({ params }: CatchAllPageProps) {
     </Layout>
   )
 }
-
-

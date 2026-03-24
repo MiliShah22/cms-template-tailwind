@@ -165,8 +165,9 @@ const productsData: Record<string, any> = {
 
 // Function to generate deterministic product data for unknown IDs
 function generateProductData(productId: string) {
-    const numericPart = parseInt(productId.replace(/\D/g, '')) || Math.floor(Math.random() * 10000)
+    const numericPart = parseInt(productId.replace(/\D/g, '')) || 1234 // Fixed fallback instead of random
     const seed = numericPart % 1000
+
 
     const statuses = ['active', 'draft', 'archived']
     const status = statuses[seed % statuses.length]
