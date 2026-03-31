@@ -94,9 +94,6 @@ export default function TopNav() {
         ; (window as any).setIsMobileMenuOpen(!currentState)
     }
   }
-
-
-
   return (
     <div className="flex items-center justify-between h-full px-4 lg:px-6">
       {/* Left side - Menu toggle and Breadcrumbs */}
