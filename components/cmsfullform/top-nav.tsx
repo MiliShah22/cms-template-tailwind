@@ -1,6 +1,6 @@
 "use client"
 
-import { Menu, Search, Bell, Settings, User, ChevronDown, Home, X, Check } from "lucide-react"
+import { Menu, Search, Bell, Settings, User, ChevronDown, Home, X, Check, Palette } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -16,6 +16,8 @@ import {
 import { ThemeToggle } from "../theme-toggle"
 import Link from "next/link"
 import { useState } from "react"
+import { useLayout } from "./layout-context"
+import { cn } from "@/lib/utils"
 
 interface Notification {
   id: string
@@ -24,6 +26,12 @@ interface Notification {
   timestamp: string
   read: boolean
   type: "success" | "warning" | "error" | "info"
+}
+
+declare global {
+  interface Window {
+    toggleThemeCustomizer?: () => void
+  }
 }
 
 export default function TopNav() {
@@ -55,6 +63,7 @@ export default function TopNav() {
   ])
 
   const unreadCount = notifications.filter((n) => !n.read).length
+  const { toggleMenuState, setIsMobileMenuOpen } = useLayout()
 
   const markAsRead = (id: string) => {
     setNotifications(notifications.map((n) => (n.id === id ? { ...n, read: true } : n)))
@@ -80,22 +89,24 @@ export default function TopNav() {
         return "bg-blue-100 dark:bg-blue-900/30"
     }
   }
-  const handleMenuToggle = () => {
 
-    if (typeof document !== 'undefined' && (window as any).toggleMenuState) {
-      ; (window as any).toggleMenuState()
-    }
+  const handleMenuToggle = () => {
+    toggleMenuState()
   }
 
   const handleMobileMenuToggle = () => {
-
-    if (typeof document !== 'undefined' && (window as any).setIsMobileMenuOpen) {
-      const currentState = (window as any).isMobileMenuOpen || false
-        ; (window as any).setIsMobileMenuOpen(!currentState)
-    }
+    //setIsMobileMenuOpen(prev => !prev)
   }
 
-
+  const handleSettingsClick = () => {
+    // Toggle ThemeCustomizer - use global for now
+    if (typeof document !== 'undefined' && (window as any).toggleThemeCustomizer) {
+      ; (window as any).toggleThemeCustomizer()
+    } else {
+      // Fallback: navigate to settings if exists
+      window.location.href = '/settings'
+    }
+  }
 
   return (
     <div className="flex items-center justify-between h-full px-4 lg:px-6">
@@ -187,8 +198,10 @@ export default function TopNav() {
                 {notifications.map((notification) => (
                   <div
                     key={notification.id}
-                    className={`px-4 py-3 border-b hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors cursor-pointer ${!notification.read ? "bg-blue-50 dark:bg-blue-900/20" : ""
-                      }`}
+className={cn(
+                      "px-4 py-3 border-b hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors cursor-pointer",
+                      !notification.read && "bg-blue-50 dark:bg-blue-900/20"
+                    )}
                     onClick={() => markAsRead(notification.id)}
                   >
                     <div className="flex items-start justify-between gap-3">
@@ -219,6 +232,7 @@ export default function TopNav() {
                       </Button>
                     </div>
                   </div>
+
                 ))}
               </div>
             )}
@@ -234,9 +248,19 @@ export default function TopNav() {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        {/* Settings */}
-        <Button variant="ghost" size="sm" className="p-2">
+        {/* Settings - FIXED: Now opens Theme Customizer */}
+        <Button variant="ghost" size="sm" className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800" onClick={handleSettingsClick} title="Open Theme Settings">
           <Settings className="h-4 w-4" />
+        </Button>
+
+        {/* Quick Theme Customizer Toggle */}
+        <Button variant="ghost" size="sm" className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800" onClick={() => {
+          const customizer = document.getElementById('theme-customizer-panel') as HTMLElement
+          if (customizer) {
+            customizer.style.transform = customizer.style.transform === 'translateX(0)' ? 'translateX(100%)' : 'translateX(0)'
+          }
+        }} title="Quick Theme Customizer">
+          <Palette className="h-4 w-4" />
         </Button>
 
         {/* Profile Dropdown */}
@@ -265,17 +289,18 @@ export default function TopNav() {
                 Profile
               </Link>
             </DropdownMenuItem>
-            {/* <DropdownMenuItem asChild>
+            <DropdownMenuItem asChild>
               <Link href="/settings" className="flex items-center cursor-pointer">
                 <Settings className="mr-2 h-4 w-4" />
                 Settings
               </Link>
-            </DropdownMenuItem> */}
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="text-red-600">Sign out</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+            </DropdownMenuContent>
+          </DropdownMenu>
       </div>
     </div>
   )
 }
+

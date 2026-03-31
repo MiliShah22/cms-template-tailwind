@@ -5,47 +5,21 @@ import Sidebar from "./sidebar"
 import TopNav from "./top-nav"
 import { useTheme } from "next-themes"
 import { useEffect, useState } from "react"
+import { cn } from "@/lib/utils"
 import { ThemeCustomizer } from "../theme-customizer"
+import { LayoutProvider, useLayout } from "./layout-context"
 
 interface LayoutProps {
   children: ReactNode
 }
 
-export default function Layout({ children }: LayoutProps) {
+function LayoutContent({ children }: LayoutProps) {
   const { theme } = useTheme()
   const [mounted, setMounted] = useState(false)
-  const [menuState, setMenuState] = useState<"full" | "collapsed" | "hidden">("full")
-  const [isHovered, setIsHovered] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
+  const { menuState, isHovered, isMobile } = useLayout()
 
   useEffect(() => {
     setMounted(true)
-  }, [])
-
-  // Listen for menu state changes and hover state
-  useEffect(() => {
-    const checkMenuState = () => {
-      if (typeof document !== 'undefined') {
-        if ((window as any).menuState) {
-          setMenuState((window as any).menuState)
-        }
-
-        if ((window as any).isHovered !== undefined) {
-          setIsHovered((window as any).isHovered)
-        }
-        if ((window as any).isMobile !== undefined) {
-          setIsMobile((window as any).isMobile)
-        }
-      }
-    }
-
-    // Check initial state
-    checkMenuState()
-
-    // Set up interval to check for changes
-    const interval = setInterval(checkMenuState, 50) // More frequent updates for hover
-
-    return () => clearInterval(interval)
   }, [])
 
   if (!mounted) {
@@ -71,7 +45,7 @@ export default function Layout({ children }: LayoutProps) {
   }
 
   return (
-    <div className={`flex h-screen ${theme === "dark" ? "dark" : ""}`}>
+    <div className={cn("flex h-screen", theme === "dark" ? "dark" : "")}>
       <Sidebar />
       <div
         className="w-full flex flex-1 flex-col transition-all duration-300 ease-in-out min-w-0"
@@ -90,3 +64,12 @@ export default function Layout({ children }: LayoutProps) {
     </div>
   )
 }
+
+export default function Layout({ children }: LayoutProps) {
+  return (
+    <LayoutProvider>
+      <LayoutContent>{children}</LayoutContent>
+    </LayoutProvider>
+  )
+}
+
