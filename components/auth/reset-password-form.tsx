@@ -84,10 +84,18 @@ export function ResetPasswordForm() {
                       onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                       required
                     />
-                    <button
+<button
                       type="button"
+                      tabIndex={0}
+                      aria-label={showPassword ? "Hide password" : "Show password"}
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          setShowPassword(!showPassword);
+                        }
+                      }}
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-1 rounded-sm"
                     >
                       {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </button>
@@ -125,10 +133,18 @@ export function ResetPasswordForm() {
                       onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                       required
                     />
-                    <button
+<button
                       type="button"
+                      tabIndex={0}
+                      aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          setShowConfirmPassword(!showConfirmPassword);
+                        }
+                      }}
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-1 rounded-sm"
                     >
                       {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </button>
