@@ -4,10 +4,12 @@ import { useState } from "react"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Plus } from "lucide-react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Package, Tag, Eye } from "lucide-react"
 import Link from "next/link"
-
+import { ProductForm } from "@/components/products/product-form"
 import { Product } from "@/lib/products"
 import { useAppSelector } from "@/lib/store/hooks"
 
@@ -16,6 +18,7 @@ const selectProducts = (state: any) => state.products.items
 export function AllProductsContent() {
     const products: Product[] = useAppSelector(selectProducts)
     const [currentPage, setCurrentPage] = useState(1)
+    const [isAddOpen, setIsAddOpen] = useState(false)
     const pageSize = 5
     const totalPages = Math.ceil(products.length / pageSize)
     const pagedProducts = products.slice((currentPage - 1) * pageSize, currentPage * pageSize)
@@ -33,6 +36,25 @@ export function AllProductsContent() {
                     <p className="text-sm text-gray-600 dark:text-gray-400">
                         View and manage all products in your catalog.
                     </p>
+                </div>
+                <div className="flex items-center gap-2">
+                    <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
+                        <DialogTrigger asChild>
+                            <Button>
+                                <Plus className="mr-2 h-4 w-4" />
+                                Add Product
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-md">
+                            <DialogHeader>
+                                <DialogTitle>Add New Product</DialogTitle>
+                                <DialogDescription>
+                                    Enter product details to add it to your catalog.
+                                </DialogDescription>
+                            </DialogHeader>
+                            <ProductForm onClose={() => setIsAddOpen(false)} />
+                        </DialogContent>
+                    </Dialog>
                 </div>
             </div>
 

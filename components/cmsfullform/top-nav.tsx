@@ -238,9 +238,9 @@ className={cn(
         </DropdownMenu>
 
         {/* Settings - FIXED: Now opens Theme Customizer */}
-        <Button variant="ghost" size="sm" className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800"  title="Open Theme Settings">
+        {/* <Button variant="ghost" size="sm" className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800"  title="Open Theme Settings">
           <Settings className="h-4 w-4" />
-        </Button>
+        </Button> */}
 
         {/* Quick Theme Customizer Toggle */}
         <Button variant="ghost" size="sm" className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800" onClick={() => {
